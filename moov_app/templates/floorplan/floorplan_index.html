@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-{% block content %}
+
+{% block content%}
 <header class = "navbar-fixed">
     <nav>
         <div class = "nav-wrapper">
@@ -17,11 +18,9 @@
         </div>
     </nav>
 </header>
-<h1>Home</h1>
-<a href="" class="btn"> Most Recent Floorplan </a>
-<hr>
-<a href="{% url 'floorplan_index' %}" class="btn"> Change FloorPlan </a>
-<hr>
-<a href="" class="btn">Add Furniture</a>
+
+<h1>FloorPlans List</h1>
+
+<a href="" class="btn">+</a>
 
 {% endblock %}

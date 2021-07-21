@@ -1,5 +1,6 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.shortcuts import redirect, render
+from .models import FloorPlan
 
 # from django.http import HttpResponse
 # from .models import Deck, Card 
@@ -27,3 +28,13 @@ def greeting(request):
 
 def home(request):
     return render(request, 'home.html')
+
+def floorplan_index(request):
+  floorplans = FloorPlan.objects.all()
+  return render(request, 'floorplan/floorplan_index.html', {'floorplans': floorplans})
+
+def floorplan_detail(request, floorplan_id):
+  floorplan = FloorPlan.objects.get(id=floorplan_id)
+  return render(request, 'floorplan/floorplan_detail.html', {
+    "floorplan":floorplan,
+  })
