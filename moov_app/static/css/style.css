@@ -1,5 +1,28 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
 .floorplan-demo{
     width: 20rem;
     height: 20rem;
     border: solid;
+}
+
+.greetings-body{
+    display:flex;
+    flex-grow: 1;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+button{
+    margin: 0.5rem;
+}
+
+footer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
