@@ -16,17 +16,33 @@
 <body>
     <header>
         <nav>
-            <div class="nav-wrapper">
-                <ul>
-                    <li>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    Moov
+                  </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <li class="dropdown-item">
                         <a href="{% url 'home' %}">Home</a>
                     </li>
-                    <li>
+                    <li class="dropdown-item">
                         <a href="{% url 'add_furniture' %}">Add Furniture</a>
                     </li>
-                    <li>
+                    <li class="dropdown-item">
                         <a href="{% url 'demo' %}">demo</a>
                     </li>
+                    {% if user.is_authenticated %}
+                    <li class="dropdown-item">
+                        <a href="{% url 'logout' %}">Logout</a>    
+                    </li>
+                    {% else %}
+                    <li class="dropdown-item">
+                        <a href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="dropdown-item">
+                        <a href="{% url 'signup' %}">Signup</a>
+                    </li>
+                    
+                    {% endif %}
                 </ul>
             </div>
         </nav>
