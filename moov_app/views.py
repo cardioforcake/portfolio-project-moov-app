@@ -1,6 +1,6 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.shortcuts import redirect, render
-from .models import FloorPlan
+from .models import FloorPlan, Furniture
 
 # from django.http import HttpResponse
 # from .models import Deck, Card 
@@ -9,6 +9,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+def floorplan_demo(request):
+    furnitures = Furniture.objects.all()
+    return render(request, 'floorplan/demo.html', {'furnitures': furnitures})
 
 def signup(request):
   error_message = ''
@@ -22,6 +26,21 @@ def signup(request):
       error_message = "Invalid sign up - Try again"
   form = UserCreationForm()
   return render(request, 'registration/signup.html', {'form': form, 'error_message' : error_message})
+
+class FurnitureCreate(LoginRequiredMixin, CreateView):
+    model = Furniture
+    fields = ['type','length','width','color']
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+class FurnitureUpdate(LoginRequiredMixin, UpdateView):
+    model = Furniture
+    fields = ['type','length','width','color']
+
+class FurnitureDelete(LoginRequiredMixin, DeleteView):
+    model = Furniture
+    success_url = '/home/'
 
 def greeting(request):
     return render(request, 'greeting.html')

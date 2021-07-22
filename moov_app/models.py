@@ -4,24 +4,24 @@ from django.urls import reverse
 # Create your models here.
 
 class Furniture(models.Model):
+    type = models.CharField(max_length=25)
     length = models.IntegerField()
     width = models.IntegerField()
-    type = models.CharField(max_length=25)
     color = models.CharField(max_length=12)
-    user_id = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
 
-    # def get_absolute_url(self):
-    #     return reverse('', kwargs={"furniture_id": self.id})
+    def get_absolute_url(self):
+        return reverse('demo')
 
 class FloorPlan(models.Model):
     length = models.IntegerField()
-    width = models.IntegerField()
-    user_id = models.IntegerField()
+    width = models.IntegerField() 
     furnitures = models.ManyToManyField(Furniture)
     comment = models.CharField(max_length=50)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
