@@ -11,7 +11,7 @@ class Furniture(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return self.type
 
     def get_absolute_url(self):
         return reverse('demo')
@@ -24,5 +24,5 @@ class FloorPlan(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return self.length
     

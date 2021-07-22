@@ -10,9 +10,20 @@ from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from django.template.defaulttags import register
+
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)
+
 def floorplan_demo(request):
+    widths = {}
+    lengths = {}
     furnitures = Furniture.objects.all()
-    return render(request, 'floorplan/demo.html', {'furnitures': furnitures})
+    for furn in furnitures:
+        widths[furn.id] = furn.width*100/5
+        lengths[furn.id] = furn.length*100/5
+    return render(request, 'floorplan/demo.html', {'furnitures': furnitures, 'widths': widths, 'lengths': lengths})
 
 def signup(request):
   error_message = ''
