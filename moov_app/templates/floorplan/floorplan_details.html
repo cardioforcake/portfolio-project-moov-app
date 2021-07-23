@@ -1,0 +1,30 @@
+
+
+
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>detail</h1>
+
+{% for fp in floorplan.photo_set.all %}
+
+    <img src="{{fp.url}}" alt="" class="responsive-img card-panel">
+
+    {% empty %} 
+    <div class="card-panel teal-text center-align">No Photos Uploaded</div>
+
+{% endfor %}
+
+<form class="card-panel" action="{% url 'add_photo' floorplan.id %}"  method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="photo-file">
+    <br>
+    <br>
+
+    <input type="submit" value="upload floorplan" class="btn">
+
+</form>
+
+{% endblock %}
+
+
