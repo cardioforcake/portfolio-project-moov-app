@@ -75,24 +75,21 @@ def floorplan_index(request):
   floorplans = FloorPlan.objects.all()
   return render(request, 'floorplan/floorplan_index.html', {'floorplans': floorplans})
 
-def floorplan_detail(request, floorplan_id):
+def floorplan_details(request, floorplan_id):
   floorplan = FloorPlan.objects.get(id=floorplan_id)
-  return render(request, 'floorplan/floorplan_detail.html', {
+  return render(request, 'floorplan/floorplan_details.html', {
     "floorplan":floorplan,
   })
 
 
 
-def floorplans_detail(request, floorplan_id):
-  floorplan = FloorPlan.objects.get(id=floorplan_id)
-  return render(request, 'floorplan/floorplan_detail.html',{'floorplan' : floorplan})
 
 
 
 
-class FloorplanCreate(CreateView):
+class FloorplanCreate(LoginRequiredMixin,CreateView):
     model = FloorPlan
-    fields = '__all__'
+    fields = ['length', 'width', 'comment']
 
     def form_valid(self, form):
       form.instance.user = self.request.user
@@ -100,14 +97,14 @@ class FloorplanCreate(CreateView):
 
 
   
-class FloorPlanUpdate(UpdateView):
+class FloorPlanUpdate(LoginRequiredMixin,UpdateView):
     model = FloorPlan
     fields = '--all__'
     # success_url = '/floorplans/floorplan_detail'
 
 
 
-class FloorplanDelete(DeleteView):
+class FloorplanDelete(LoginRequiredMixin,DeleteView):
     model = FloorPlan
     success_url = '/floorplans/'
 
@@ -131,4 +128,4 @@ def add_photo(request, floorplan_id):
     except Exception as e:
       print('an error occurred uploading files to S3')
       print(e)
-  return redirect(request, 'floorplan/floorplan_index.html')
+  return redirect(request, 'floorplan/floorplan_details.html')
