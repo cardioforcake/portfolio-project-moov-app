@@ -4,6 +4,21 @@
 
 <h1>FloorPlans List</h1>
 
-<a href="" class="btn">+</a>
+{% for fp in floorplans %}
+
+<div class="card">
+    <a href="{% url 'floorplan_details' fp.id %}">
+        <div class="card-content">
+            <span class="card-title">{{fp.length}}</span>
+            <p>League: {{fp.comment}}</p>
+        </div>
+    </a>
+</div>
+{% endfor %}
+
+
+
+
+<a href="{% url 'floorplan_create'  %}" >add</a>
 
 {% endblock %}
