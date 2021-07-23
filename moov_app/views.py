@@ -1,6 +1,6 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.shortcuts import redirect, render
-from .models import FloorPlan
+from .models import FloorPlan, Furniture, Photo
 
 # from django.http import HttpResponse
 # from .models import Deck, Card 
@@ -9,6 +9,28 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from django.template.defaulttags import register
+import boto3
+import uuid
+
+S3_BASE_URL = 'https://s3-us-east-2.amazonaws.com/'
+BUCKET = 'final-project-team'
+
+
+
+@register.filter
+def get_item(dictionary, key):
+    return dictionary.get(key)
+
+def floorplan_demo(request):
+    widths = {}
+    lengths = {}
+    furnitures = Furniture.objects.all()
+    for furn in furnitures:
+        widths[furn.id] = furn.width*100/5
+        lengths[furn.id] = furn.length*100/5
+    return render(request, 'floorplan/demo.html', {'furnitures': furnitures, 'widths': widths, 'lengths': lengths})
 
 def signup(request):
   error_message = ''
@@ -22,6 +44,26 @@ def signup(request):
       error_message = "Invalid sign up - Try again"
   form = UserCreationForm()
   return render(request, 'registration/signup.html', {'form': form, 'error_message' : error_message})
+
+class FurnitureCreate(LoginRequiredMixin, CreateView):
+    model = Furniture
+    fields = ['type','length','width','color']
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+class FurnitureUpdate(LoginRequiredMixin, UpdateView):
+    model = Furniture
+    fields = ['type','length','width','color']
+
+class FurnitureDelete(LoginRequiredMixin, DeleteView):
+    model = Furniture
+    success_url = '/home/'
+
+
+
+
+
 
 def greeting(request):
     return render(request, 'greeting.html')
@@ -38,3 +80,55 @@ def floorplan_detail(request, floorplan_id):
   return render(request, 'floorplan/floorplan_detail.html', {
     "floorplan":floorplan,
   })
+
+
+
+def floorplans_detail(request, floorplan_id):
+  floorplan = FloorPlan.objects.get(id=floorplan_id)
+  return render(request, 'floorplan/floorplan_detail.html',{'floorplan' : floorplan})
+
+
+
+
+class FloorplanCreate(CreateView):
+    model = FloorPlan
+    fields = '__all__'
+
+    def form_valid(self, form):
+      form.instance.user = self.request.user
+      return super().form_valid(form)
+
+
+  
+class FloorPlanUpdate(UpdateView):
+    model = FloorPlan
+    fields = '--all__'
+    # success_url = '/floorplans/floorplan_detail'
+
+
+
+class FloorplanDelete(DeleteView):
+    model = FloorPlan
+    success_url = '/floorplans/'
+
+  
+  
+
+
+
+def add_photo(request, floorplan_id):
+  photo_file = request.FILES.get('photo-file', None)
+  if photo_file:
+    s3 = boto3.client('s3')
+    key = uuid.uuid4().hex[:6] + photo_file.name[photo_file.name.rfind('.'):]
+
+    try:
+      s3.upload_fileobj(photo_file, BUCKET, key)
+      url = f"{S3_BASE_URL}{BUCKET}/{key}"
+      photo = Photo(url= url, floorplan_id= floorplan_id)
+      photo.save()
+
+    except Exception as e:
+      print('an error occurred uploading files to S3')
+      print(e)
+  return redirect(request, 'floorplan/floorplan_index.html')

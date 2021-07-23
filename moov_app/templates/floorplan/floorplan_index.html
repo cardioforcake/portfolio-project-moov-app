@@ -1,26 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content%}
-<header class = "navbar-fixed">
-    <nav>
-        <div class = "nav-wrapper">
-            <ul>
-                <li>
-                    <a href=""> Home </a>
-                </li>
-                <li>
-                    <a href="">Settings</a>
-                </li>
-                <li>
-                    <a href=""> View Furniture </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-</header>
 
 <h1>FloorPlans List</h1>
 
-<a href="" class="btn">+</a>
+<a href="{url 'floorplans_create'}" class="btn">+</a>
+
+{% for fp in floorplan.photo_set.all %}
+
+    <img src="{{fp.url}}" alt="" class="responsive-img card-panel">
+
+    {% empty %} 
+    <div class="card-panel teal-text center-align">No Photos Uploaded</div>
+
+{% endfor %}
+
+<form class="card-panel" action="{url 'add_photo' floorplan.id}"  method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="photo-file">
+    <br>
+    <br>
+
+    <input type="submit" value="upload floorplan" class="btn">
+
+</form>
+<a href="{% url 'floorplans_create'  %}" >add</a>
 
 {% endblock %}
