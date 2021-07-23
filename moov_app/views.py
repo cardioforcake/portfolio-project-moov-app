@@ -28,8 +28,8 @@ def floorplan_demo(request):
     lengths = {}
     furnitures = Furniture.objects.all()
     for furn in furnitures:
-        widths[furn.id] = furn.width*100/5
-        lengths[furn.id] = furn.length*100/5
+        widths[furn.id] = furn.width/20
+        lengths[furn.id] = 10/20*100
     return render(request, 'floorplan/demo.html', {'furnitures': furnitures, 'widths': widths, 'lengths': lengths})
 
 def signup(request):

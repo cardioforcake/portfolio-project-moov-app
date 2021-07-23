@@ -67,7 +67,7 @@
 
     <div class="floorplan-demo">
         {% for furn in furnitures %}
-            <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{ lengths | get_item:furn.id }}%; height: {{ widths | get_item:furn.id }}%">
+            <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{ lengths | get_item:furn.id }}%">
                 {{furn.type}}
                 {{ lengths | get_item:furn.id }}
                 {{ widths | get_item:furn.id }}
@@ -77,7 +77,6 @@
     {% block content %}
     {% endblock %}
     <script>    
-        $('#f1').css('width', '7rem')
     </script>
 </body>
 
