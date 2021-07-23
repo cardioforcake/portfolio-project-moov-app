@@ -25,4 +25,22 @@ class FloorPlan(models.Model):
 
     def __str__(self):
         return self.length
+
+    def get_absolute_url(self):
+        return reverse('floorplans/')
+
+
+
+
+class Photo(models.Model):
+    url = models.CharField(max_length=200)
+    floorplan = models.ForeignKey(FloorPlan, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f" photo for floorplan_id: {self.floorplan_id} @{self.url}"
+
+    # def get_absolute_url(self):
+    #     return reverse('floorplan_index')
+         
+
     
