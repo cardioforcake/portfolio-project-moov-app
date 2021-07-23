@@ -128,4 +128,4 @@ def add_photo(request, floorplan_id):
     except Exception as e:
       print('an error occurred uploading files to S3')
       print(e)
-  return redirect(request, 'floorplan/floorplan_details.html')
+    return redirect('floorplan_details', floorplan_id = floorplan_id)
