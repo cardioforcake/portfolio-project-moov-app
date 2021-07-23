@@ -9,13 +9,34 @@
     border: solid;
 }
 
+body {
+    background-color: #5E96AE !important;
+}
+
 main{
     display:flex;
-    flex-grow: 1;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    font-family: 'Archivo', sans-serif;
+    color:#b33c8b;
+    
     
 }
+
+a {
+    color: #b33c8b;
+    border: 3px;
+}
+
+.carousel-inner{
+    max-height: 70vh;
+ }
+ 
+ .item, img{
+    min-height: 50vh;
+    min-width: 50vh;
+ }
 
 .carousel-fade .carousel-item {
 	opacity: 0;
