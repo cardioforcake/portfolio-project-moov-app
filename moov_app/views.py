@@ -93,7 +93,7 @@ def floorplan_details(request, floorplan_id):
 
 class FloorplanCreate(LoginRequiredMixin,CreateView):
     model = FloorPlan
-    fields = ['length', 'width', 'comment']
+    fields = ['name','length', 'width', 'comment']
 
     def form_valid(self, form):
       form.instance.user = self.request.user
@@ -103,7 +103,7 @@ class FloorplanCreate(LoginRequiredMixin,CreateView):
   
 class FloorPlanUpdate(LoginRequiredMixin,UpdateView):
     model = FloorPlan
-    fields = '--all__'
+    fields = ['length', 'width', 'comment']
     # success_url = '/floorplans/floorplan_detail'
 
 
