@@ -1,4 +1,19 @@
-<!DOCTYPE html>
+<div class="modal-header">
+    <h5 class="modal-title" id="loginLabel">Login</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form action="" method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Login" class="btn">
+        <input type="hidden" name="next" value="{{ next }}">
+    </form>
+</div>
+<div class="modal-footer">
+</div>
+
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -9,11 +24,6 @@
 <body>
     <h1>Login</h1>
 
-    <form action="" method="post" action="{% url 'login' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Login" class="btn">
-        <input type="hidden" name="next" value="{{ next }}">
-    </form>
+    <h1>REMOVED FORM AND PASTED IN WORKING CODE</h1>
 </body>
-</html>
+</html> -->
