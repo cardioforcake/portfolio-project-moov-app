@@ -81,10 +81,20 @@ def floorplan_index(request):
 
 def floorplan_details(request, floorplan_id):
   floorplan = FloorPlan.objects.get(id=floorplan_id)
+  furnitures_floorplan_doesnt_have = Furniture.objects.exclude(id__in = floorplan.furnitures.all().values_list('id'))
   return render(request, 'floorplan/floorplan_details.html', {
     "floorplan":floorplan,
+    "furnitures": furnitures_floorplan_doesnt_have,
   })
 
+def assoc_furniture(request, floorplan_id, furniture_id):
+  FloorPlan.objects.get(id=floorplan_id).furnitures.add(furniture_id)
+  return redirect("floorplan_details", floorplan_id = floorplan_id)
+  
+def remove_furniture(request, floorplan_id, furniture_id):
+  FloorPlan.objects.get(id=floorplan_id).furnitures.remove(furniture_id)
+  return redirect("floorplan_details", floorplan_id = floorplan_id)
+  
 
 
 
