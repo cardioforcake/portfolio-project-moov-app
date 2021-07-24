@@ -67,13 +67,23 @@
 
     <div class="floorplan-demo">
         {% for furn in furnitures %}
-            <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{ lengths | get_item:furn.id }}%">
+            <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{ furn.length | scale_furniture:20 }}; height: {{ furn.width | scale_furniture:20 }}; ">
                 {{furn.type}}
-                {{ lengths | get_item:furn.id }}
-                {{ widths | get_item:furn.id }}
+                {{ furn.length | scale_furniture:20 }}
+                {{ furn.width | scale_furniture:20 }}
             </div>
         {% endfor %}
     </div>
+    <div>
+        {% for furn in furnitures %}
+            <div class="card">
+                {{furn.type}}
+                <a href="{% url 'furniture_update' furn.id %}" class="btn">Edit</a>
+                <a href="{% url 'furniture_delete' furn.id %}" class="btn">Delete</a>
+            </div>
+        {% endfor %}
+    </div>
+    <a href="{% url 'furniture_create' %}" class="btn">Add Furniture</a>
     {% block content %}
     {% endblock %}
     <script>    
