@@ -23,13 +23,17 @@ BUCKET = 'final-project-team'
 def get_item(dictionary, key):
     return dictionary.get(key)
 
+@register.filter
+def scale_furniture(furnitureLength, floorplanLength):
+  return f'{furnitureLength/floorplanLength*100}%'
+
 def floorplan_demo(request):
     widths = {}
     lengths = {}
     furnitures = Furniture.objects.all()
     for furn in furnitures:
-        widths[furn.id] = furn.width/20
-        lengths[furn.id] = 10/20*100
+        widths[furn.id] = furn.width
+        lengths[furn.id] = furn.length
     return render(request, 'floorplan/demo.html', {'furnitures': furnitures, 'widths': widths, 'lengths': lengths})
 
 def signup(request):
@@ -58,7 +62,7 @@ class FurnitureUpdate(LoginRequiredMixin, UpdateView):
 
 class FurnitureDelete(LoginRequiredMixin, DeleteView):
     model = Furniture
-    success_url = '/home/'
+    success_url = '/floorplandemo/'
 
 
 

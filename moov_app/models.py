@@ -19,17 +19,18 @@ class Furniture(models.Model):
 class FloorPlan(models.Model):
     length = models.IntegerField()
     width = models.IntegerField() 
-    furnitures = models.ManyToManyField(Furniture)
+    furnitures = models.ManyToManyField(Furniture, through='LinkedFurniture')
     comment = models.CharField(max_length=50)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-
     def __str__(self):
         return self.comment
-
     def get_absolute_url(self):
         return reverse('floorplan_index')
 
-
+class LinkedFurniture(models.Model):
+    furniture = models.ForeignKey(Furniture, on_delete=models.CASCADE)
+    floorplan = models.ForeignKey(FloorPlan, on_delete=models.CASCADE)
+    rotated = models.IntegerField(default=1)
 
 
 class Photo(models.Model):
