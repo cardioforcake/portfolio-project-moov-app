@@ -14,6 +14,8 @@ urlpatterns = [
     path('floorplans/<int:floorplan_id>', views.floorplan_details, name="floorplan_details"),
     path('floorplans/<int:pk>/update', views.FloorPlanUpdate.as_view(), name="floorplan_update"),
     path('floorplans/<int:pk>/delete', views.FloorplanDelete.as_view(), name="floorplan_delete"),
+    path('floorplans/<int:floorplan_id>/assoc_furniture/<int:furniture_id>/', views.assoc_furniture, name='assoc_furniture'),
+    path('floorplans/<int:floorplan_id>/remove_furniture/<int:furniture_id>/', views.remove_furniture, name='remove_furniture'),
 
 
     path('furniture/create/', views.FurnitureCreate.as_view(), name="furniture_create"),
