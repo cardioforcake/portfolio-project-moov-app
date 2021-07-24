@@ -17,6 +17,7 @@ class Furniture(models.Model):
         return reverse('demo')
 
 class FloorPlan(models.Model):
+    name = models.CharField(max_length=20)
     length = models.IntegerField()
     width = models.IntegerField() 
     furnitures = models.ManyToManyField(Furniture, through='LinkedFurniture')
