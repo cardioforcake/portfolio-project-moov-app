@@ -1,7 +1,6 @@
 .carousel { z-index: -99;}
 .carousel-item {
-    width: 10%;
-    height: 10%;
+    margin: auto;
 }
 
 .carousel-fade .carousel-item {
