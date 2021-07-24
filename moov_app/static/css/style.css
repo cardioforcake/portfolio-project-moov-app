@@ -14,11 +14,12 @@
     flex-direction: column;
     justify-content: center;
     min-height: 100vh;
-    
 }
 
 body{
     background-color: #5E96AE !important;
+    background-image: -webkit-linear-gradient(25deg, #5E96AE 45%, #8fb2c2 45%);
+    min-height: 400px;
 }
 
 .navbar {
@@ -33,8 +34,7 @@ main {
     flex: 1;
     flex-direction: column;
     align-items: center;
-    /* font-family: 'Archivo', sans-serif;
-    color: #b33c8b; */
+    font-family: 'Archivo', sans-serif;
 
 
 }
@@ -45,7 +45,8 @@ main {
 }
 
 .btn {
-    font-family: 'Archivo', sans-serif;;
+    font-family: 'Archivo', sans-serif;
+    margin: 5px;
 }
 footer {
     display: flex;
