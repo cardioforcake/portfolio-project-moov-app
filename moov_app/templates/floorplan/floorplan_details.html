@@ -1,21 +1,19 @@
-
-
-
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>detail</h1>
-
+<div class="title border border-dark w-100 text-center">
+    <h1>Detail</h1>
+</div>
 {% for fp in floorplan.photo_set.all %}
 
-    <img src="{{fp.url}}" alt="" class="responsive-img card-panel">
+<img src="{{fp.url}}" alt="" class="responsive-img card-panel">
 
-    {% empty %} 
-    <div class="card-panel teal-text center-align">No Photos Uploaded</div>
+{% empty %}
+<div class="card-panel teal-text center-align">No Photos Uploaded</div>
 
 {% endfor %}
 
-<form class="card-panel" action="{% url 'add_photo' floorplan.id %}"  method="POST" enctype="multipart/form-data">
+<form class="card-panel" action="{% url 'add_photo' floorplan.id %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <input type="file" name="photo-file">
     <br>
@@ -26,5 +24,3 @@
 </form>
 
 {% endblock %}
-
-

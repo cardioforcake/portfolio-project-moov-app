@@ -1,24 +1,23 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content%}
-
+<div class="title border border-dark w-100 text-center">
 <h1>FloorPlans List</h1>
-
+</div>
 {% for fp in floorplans %}
-
-<div class="card">
+<div class= "floorplan-cards">
+<div class="card col">
     <a href="{% url 'floorplan_details' fp.id %}">
         <div class="card-content">
+            <img class="d-block mx-auto w-25" src="{% static "moov_app/media/SampleFloorplan.png" %}" alt="Floorplan Image" />
             <span class="card-title">{{fp.length}}</span>
             <p>League: {{fp.comment}}</p>
         </div>
     </a>
 </div>
 {% endfor %}
-
-
-
-
-<a href="{% url 'floorplan_create'  %}" >add</a>
+</div>
+<a href="{% url 'floorplan_create'  %}" ><button  class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block ">Add Floorplan</button></a>
 
 {% endblock %}

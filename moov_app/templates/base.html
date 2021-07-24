@@ -14,38 +14,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@1,300&display=swap" rel="stylesheet">
     <title>Moov</title>
 </head>
-<body class= "border-dark border-5  ">
-    <div class=" container ">
+<body class= "background">
+    <div class=" container border border-dark border-5 w-100">
     <header>
         <nav class="navbar row">
             <div class="dropdown d-block">
-                <button class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     M O O V
                   </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <li class="dropdown-item">
-                        <a href="{% url 'home' %}">Home</a>
-                    </li>
-                    <li class="dropdown-item">
-                        <a href="{% url 'add_furniture' %}">Add Furniture</a>
-                    </li>
-                    <li class="dropdown-item">
-                        <a href="{% url 'demo' %}">demo</a>
-                    </li>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="{% url 'home' %}">Home</a>
+                        <a class="dropdown-item" href="{% url 'add_furniture' %}">Add Furniture</a>
+                        <a class="dropdown-item" href="{% url 'demo' %}">demo</a>
                     {% if user.is_authenticated %}
-                    <li class="dropdown-item">
-                        <a href="{% url 'logout' %}">Logout</a>    
-                    </li>
+                        <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>    
                     {% else %}
-                    <li class="dropdown-item">
-                        <a href="{% url 'login' %}">Login</a>
-                    </li>
-                    <li class="dropdown-item">
-                        <a href="{% url 'signup' %}">Signup</a>
-                    </li>
+                        <a class="dropdown-item" href="{% url 'login' %}">Login</a>
+                        <a class="dropdown-item" href="{% url 'signup' %}">Signup</a>
                     
                     {% endif %}
-                </ul>
+                    </div>
             </div>
         </nav>
     </header>
@@ -53,6 +41,8 @@
         {% block content %}
         {% endblock %}
       </main>
+    <footer>copyright 2021: M O O V &copy </footer>
 </div>
+
 </body>
 </html>

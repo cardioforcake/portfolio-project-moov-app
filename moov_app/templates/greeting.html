@@ -12,12 +12,16 @@
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
   </script>
   <link rel="stylesheet" type="text/css" href="{% static 'css/greeting.css' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@1,300&display=swap" rel="stylesheet">
   <title>Moov</title>
 </head>
 
-<body class="container border border-dark border-5  text-center">
-  <div class="row">
-    <div class="carousel slide carousel-fade d-none d-sm-none d-md-none d-lg-block d-xl-block" data-bs-ride="carousel" data-bs-interval="3000">
+<body class=" border border-dark border-5  text-center">
+  <div class="row container">
+    <div class="carousel slide carousel-fade d-none d-sm-none d-md-none d-lg-block d-xl-block" data-bs-ride="carousel"
+      data-bs-interval="3000">
       <div class="carousel-inner">
         <div class="carousel-item active">
           <img class="d-block mx-auto" src="{% static "moov_app/media/carousel1.jpg" %}" alt="logo1" />
@@ -31,7 +35,8 @@
       </div>
     </div>
 
-    <div class="carousel slide carousel-fade d-block d-sm-block d-md-block d-lg-none d-xl-none" data-bs-ride="carousel" data-bs-interval="3000">
+    <div class="carousel slide carousel-fade d-block d-sm-block d-md-block d-lg-none d-xl-none" data-bs-ride="carousel"
+      data-bs-interval="3000">
       <div class="carousel-inner">
         <div class="carousel-item active">
           <img class="d-block mx-auto" src="{% static "moov_app/media/carousel1sm.jpg" %}" alt="logo1" />
@@ -45,11 +50,11 @@
       </div>
     </div>
 
-
-    <button class="btn mb-md-0 btn-secondary btn-block "><a class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block"
-        href="{% url 'home' %}">Enter</a></button>
+    <button class="btn mb-md-0 btn-secondary btn-block "><a
+        class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block w-100" href="{% url 'home' %}">Enter</a></button>
     {% if user.is_authenticated %}
-    <button class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block"><a class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block" href="{% url 'logout' %}">Log Out</a></button>
+    <button class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block"><a
+        class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block w-100" href="{% url 'logout' %}">Log Out</a></button>
     {% else %}
     <button type="button" class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block" data-bs-toggle="modal"
       data-bs-target="#login">
@@ -105,7 +110,7 @@
       </div>
     </div>
     {% endif %}
-    <footer>copyright 2021</footer>
+    <footer>copyright 2021: M O O V &copy </footer>
   </div>
 </body>
 
