@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content%}
-
+<div class="title border border-dark w-100 text-center">
 <h1>FloorPlans List</h1>
-
+</div>
 {% for fp in floorplans %}
 
 <div class="card">
@@ -16,9 +16,6 @@
 </div>
 {% endfor %}
 
-
-
-
-<a href="{% url 'floorplan_create'  %}" >add</a>
+<a href="{% url 'floorplan_create'  %}" ><button  class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block ">Add Floorplan</button></a>
 
 {% endblock %}
