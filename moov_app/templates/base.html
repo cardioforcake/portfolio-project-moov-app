@@ -14,12 +14,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@1,300&display=swap" rel="stylesheet">
     <title>Moov</title>
 </head>
-<body>
+<body class= "border-dark border-5  ">
+    <div class=" container ">
     <header>
-        <nav>
+        <nav class="navbar row">
             <div class="dropdown d-block">
                 <button class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                    Moov
+                    M O O V
                   </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     <li class="dropdown-item">
@@ -48,9 +49,10 @@
             </div>
         </nav>
     </header>
-    <main class="container">
+    <main class="">
         {% block content %}
         {% endblock %}
       </main>
+</div>
 </body>
 </html>
