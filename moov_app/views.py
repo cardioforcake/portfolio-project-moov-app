@@ -1,6 +1,6 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.shortcuts import redirect, render
-from .models import FloorPlan, Furniture, Photo
+from .models import FloorPlan, Furniture, Photo, LinkedFurniture
 
 # from django.http import HttpResponse
 # from .models import Deck, Card 
@@ -28,13 +28,13 @@ def scale_furniture(furnitureLength, floorplanLength):
   return f'{furnitureLength/floorplanLength*100}%'
 
 def floorplan_demo(request):
-    widths = {}
-    lengths = {}
-    furnitures = Furniture.objects.all()
-    for furn in furnitures:
-        widths[furn.id] = furn.width
-        lengths[furn.id] = furn.length
-    return render(request, 'floorplan/demo.html', {'furnitures': furnitures, 'widths': widths, 'lengths': lengths})
+    furnitures = []
+    floorplan = FloorPlan.objects.get(id=3)
+    furns = floorplan.furnitures.all()
+    linkedFurniture = LinkedFurniture.objects.filter(floorplan=3)
+    for furn in furns:
+      furnitures.append({'id': furn.id, 'type': furn.type, 'width': furn.width, 'length':furn.length, 'color':furn.color, 'rotated':linkedFurniture.get(furniture=furn.id).rotated})
+    return render(request, 'floorplan/demo.html', {'furnitures': furnitures, 'floorplan': floorplan})
 
 def signup(request):
   error_message = ''
@@ -124,7 +124,11 @@ class FloorplanDelete(LoginRequiredMixin,DeleteView):
 
   
   
-
+def rotate_furniture(request, floorplan_id, furniture_id):
+  linked = LinkedFurniture.objects.filter(floorplan=floorplan_id).get(furniture=furniture_id)
+  linked.rotated *= -1
+  linked.save()
+  return redirect('demo')
 
 
 def add_photo(request, floorplan_id):

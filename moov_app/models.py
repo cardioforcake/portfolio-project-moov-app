@@ -33,6 +33,9 @@ class LinkedFurniture(models.Model):
     floorplan = models.ForeignKey(FloorPlan, on_delete=models.CASCADE)
     rotated = models.IntegerField(default=1)
 
+class CurrentFloorPlan(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    currentfloorplan = models.ForeignKey(FloorPlan, on_delete=models.CASCADE)
 
 class Photo(models.Model):
     url = models.CharField(max_length=200)
