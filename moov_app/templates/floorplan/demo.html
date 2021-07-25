@@ -14,36 +14,36 @@
     
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script>
-    $( function() {
-      $( ".furniture" ).draggable({containment: "parent"});
-    } );
-    $( function() {
-      $( "#draggable2" ).draggable({containment: "parent"});
-    } );
-  
-    function lock(dragId){
-      $(`#${dragId}`).draggable({disabled: true})
-    }
-  
-    function unlock(dragId){
-      $(`#${dragId}`).draggable({disabled: false})
-    }
-  
-    function tog(dragId){
-      $(`#${dragId}`).toggleClass("ui-draggable-disabled")
-    }
-  
-    function addbackground(id){
-      $(`#${id}`).toggleClass("red")
-    }
-    </script>
+    <script src="{% static 'jquidragcollide/jquery-1.8.3.min.js' %}"></script>
+    <script src="{% static 'jquidragcollide/ui/jquery.ui.core.js' %}"></script>
+    <script src="{% static 'jquidragcollide/ui/jquery.ui.widget.js' %}"></script>
+    <script src="{% static 'jquidragcollide/ui/jquery.ui.mouse.js' %}"></script>
+    <script src="{% static 'jquidragcollide/ui/jquery.ui.draggable.js' %}"></script>
+    <script src="{% static 'jquidragcollide/jquery-collision.min.js' %}"></script>
+    <script src="{% static 'jquidragcollide/jquery-ui-draggable-collision.min.js' %}"></script>
+    <style>
+      .floorplan-demo{
+        border: solid;
+        background-size:auto;
+        padding-top: 0.2rem;
+        object-fit: scale-down;
+      }
+      .furniture{
+          border-radius: 0.1em;
+      }
+      /* .screen{
+        width: 50%;
+        border: solid;
+        resize: both;
+        overflow: auto;
+      } */
+    </style>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Demo</title>
 </head>
 <body>
-    <nav>
+    <nav hidden>
         <div class="nav-wrapper">
             <ul class="right">
                 <li>
@@ -64,30 +64,77 @@
             </ul>
         </div>
     </nav>
-
-    <div class="floorplan-demo">
+      <div class="floorplan-demo">
         {% for furn in furnitures %}
-            <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{ furn.length | scale_furniture:20 }}; height: {{ furn.width | scale_furniture:20 }}; ">
-                {{furn.type}}
-                {{ furn.length | scale_furniture:20 }}
-                {{ furn.width | scale_furniture:20 }}
-            </div>
+              {% if furn.rotated == 1 %}
+                <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{ furn.length | scale_furniture:floorplan.length }}; height: {{ furn.width | scale_furniture:floorplan.width }}; background-color: yellow;">
+                    {{furn.id}}
+                    {{ furn.length | scale_furniture:20 }}
+                    {{ furn.width | scale_furniture:20 }}
+                </div>
+              {% elif furn.rotated == -1 %}
+                <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{ furn.width | scale_furniture:floorplan.length }}; height: {{ furn.length | scale_furniture:floorplan.width }}; background-color: yellow;">
+                    {{furn.id}}
+                    {{ furn.length | scale_furniture:20 }}
+                    {{ furn.width | scale_furniture:20 }}
+                </div>
+              {% endif %}
+
+              {% for furn2 in furnitures %}
+                {% if furn2.id != furn.id%}
+                <script>
+                  $( function() {
+                      $( '#f{{furn.id}}' ).draggable({containment: ".floorplan-demo", obstacle: '#f{{furn2.id}}', preventCollision: true});
+                  } );
+                </script>
+                {% endif %}
+              {% endfor %}
         {% endfor %}
     </div>
+    <p id="fpWidth" hidden>{{floorplan.length}}</p>
+    <p id="fpHeight" hidden>{{floorplan.width}}</p>
+
     <div>
         {% for furn in furnitures %}
             <div class="card">
                 {{furn.type}}
                 <a href="{% url 'furniture_update' furn.id %}" class="btn">Edit</a>
                 <a href="{% url 'furniture_delete' furn.id %}" class="btn">Delete</a>
+                <a href="{% url 'rotate' floorplan.id furn.id %}" class="btn">Rotate</a>
             </div>
         {% endfor %}
     </div>
     <a href="{% url 'furniture_create' %}" class="btn">Add Furniture</a>
+    {% for f in furns %}
+      <p>{{f.rotated}}</p>
+    {% endfor %}
     {% block content %}
     {% endblock %}
-    <script>    
-    </script>
+    <script>
+      scrnW = window.innerWidth
+      scrnH = window.innerHeight
+      fpW = $('#fpWidth').text()
+      fpH = $('#fpHeight').text()
+      console.log(Number(fpW)/Number(fpH))
+      if((scrnW/scrnH) > (Number(fpW)/Number(fpH))){
+        $('.floorplan-demo').css({'height' : '90vh', 'width': `${Number(fpW)/Number(fpH)*90}vh`})
+      }else(
+        $('.floorplan-demo').css({'width' : '90vw', 'height': `${Number(fpH)/Number(fpW)*90}vw`})
+      )
+
+      function lock(dragId){
+        $(`#${dragId}`).draggable({disabled: true})
+      }
+      function unlock(dragId){
+        $(`#${dragId}`).draggable({disabled: false})
+      }
+      function tog(dragId){
+        $(`#${dragId}`).toggleClass("ui-draggable-disabled")
+      }
+      function addbackground(id){
+        $(`#${id}`).toggleClass("red")
+      }
+      </script>
 </body>
 
 </html>
