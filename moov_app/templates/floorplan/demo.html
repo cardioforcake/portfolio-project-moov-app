@@ -25,8 +25,8 @@
       .floorplan-demo{
         border: solid;
         background-size:auto;
-        padding-top: 0.2rem;
         object-fit: scale-down;
+        margin: auto;
       }
       .furniture{
           border-radius: 0.1em;
@@ -64,19 +64,17 @@
             </ul>
         </div>
     </nav>
+      <p id="fpWidth" hidden>{{floorplan.length}}</p>
+      <p id="fpHeight" hidden>{{floorplan.width}}</p>
       <div class="floorplan-demo">
         {% for furn in furnitures %}
               {% if furn.rotated == 1 %}
                 <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{ furn.length | scale_furniture:floorplan.length }}; height: {{ furn.width | scale_furniture:floorplan.width }}; background-color: yellow;">
                     {{furn.id}}
-                    {{ furn.length | scale_furniture:20 }}
-                    {{ furn.width | scale_furniture:20 }}
                 </div>
               {% elif furn.rotated == -1 %}
                 <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{ furn.width | scale_furniture:floorplan.length }}; height: {{ furn.length | scale_furniture:floorplan.width }}; background-color: yellow;">
                     {{furn.id}}
-                    {{ furn.length | scale_furniture:20 }}
-                    {{ furn.width | scale_furniture:20 }}
                 </div>
               {% endif %}
 
@@ -90,9 +88,22 @@
                 {% endif %}
               {% endfor %}
         {% endfor %}
+        <p id="furniture-ids" hidden>
+        {% for furn in furnitures %}
+            #f{{furn.id}}
+        {% endfor %}
+        </p>
+        {% for furn in furnitures %}
+        <script>
+            $( function(){
+              $('#f{{furn.id}}').draggable({containtment: ".floorplan-demo", stop: function(event, ui){
+                  localStorage.setItem('p{{floor.id}}f{{furn.id}}', JSON.stringify(ui.position))
+                  }
+               })
+            })
+        </script>
+        {% endfor %}
     </div>
-    <p id="fpWidth" hidden>{{floorplan.length}}</p>
-    <p id="fpHeight" hidden>{{floorplan.width}}</p>
 
     <div>
         {% for furn in furnitures %}
@@ -111,16 +122,37 @@
     {% block content %}
     {% endblock %}
     <script>
-      scrnW = window.innerWidth
-      scrnH = window.innerHeight
-      fpW = $('#fpWidth').text()
-      fpH = $('#fpHeight').text()
-      console.log(Number(fpW)/Number(fpH))
-      if((scrnW/scrnH) > (Number(fpW)/Number(fpH))){
-        $('.floorplan-demo').css({'height' : '90vh', 'width': `${Number(fpW)/Number(fpH)*90}vh`})
-      }else(
-        $('.floorplan-demo').css({'width' : '90vw', 'height': `${Number(fpH)/Number(fpW)*90}vw`})
-      )
+      console.log(JSON.parse(localStorage.getItem('p3f4') || "{}"))
+      console.log(JSON.parse(localStorage.getItem('p3f5') || "{}"))
+      furnIds = $('#furniture-ids').text()
+      furnIds = furnIds.replace(/\r\n|\n| /g, '')
+      furnIds = furnIds.split('#')
+      furnIds.shift()
+      furnIds.forEach((furn, idx)=>{
+        $( function(){
+          $(`#${furn}`).draggable({containtment: ".floorplan-demo", stop: function(event, ui){
+            localStorage.setItem(`p{{floorplan.id}}${furn}`, JSON.stringify(ui.position))
+           }})
+        })
+        if(JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").left !== null){
+          $(`#${furn}`).css({'left': `${JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").left}px`, 'top': `${JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").top}px`})
+        }
+      })
+
+      fpW = {{floorplan.length}}
+      fpH = {{floorplan.width}}
+
+      function resizeFloorPlan(){
+        scrnW = window.innerWidth
+        scrnH = window.innerHeight
+        if((scrnW/scrnH) > (Number(fpW)/Number(fpH))){
+          $('.floorplan-demo').css({'height' : '90vh', 'width': `${Number(fpW)/Number(fpH)*90}vh`})
+        }else(
+          $('.floorplan-demo').css({'width' : '90vw', 'height': `${Number(fpH)/Number(fpW)*90}vw`})
+        )
+      }
+      resizeFloorPlan()
+      $(window).resize(resizeFloorPlan)
 
       function lock(dragId){
         $(`#${dragId}`).draggable({disabled: true})
