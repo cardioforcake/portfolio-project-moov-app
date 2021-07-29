@@ -58,12 +58,12 @@
               {% if furn.rotated == 1 %}
                 <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{furn.length | scale_furniture:floorplan.length}}; height: {{furn.width | scale_furniture:floorplan.width}}; background-color: yellow;">
                     {{furn.id}}
-                    <button id="lf{{furn.id}}">Lock/Unlock</button>
+                    <!-- <button id="lf{{furn.id}}">Lock/Unlock</button> -->
                 </div>
               {% elif furn.rotated == -1 %}
                 <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{ furn.width | scale_furniture:floorplan.length }}; height: {{ furn.length | scale_furniture:floorplan.width }}; background-color: yellow;">
                     {{furn.id}}
-                    <button id="lf{{furn.id}}">Lock/Unlock</button>
+                    <!-- <button id="lf{{furn.id}}">Lock/Unlock</button> -->
                 </div>
               {% endif %}
               <script>
@@ -98,8 +98,6 @@
 
       $('#fp-container').css({'background-size':'calc(100% / {{floorplan.length}}) calc(100% / {{floorplan.width}})','background-image':'linear-gradient(to right, rgb(170, 170, 170) 1px, transparent 1px),linear-gradient(to bottom, rgb(170, 170, 170) 1px, transparent 1px)', 'background-color':'transparent'})
       
-      console.log(JSON.parse(localStorage.getItem('p3f4') || "{}"))
-      console.log(JSON.parse(localStorage.getItem('p3f5') || "{}"))
       furnIds = $('#furniture-ids').text()
       furnIds = furnIds.replace(/\r\n|\n| /g, '')
       furnIds = furnIds.split('#')
@@ -127,18 +125,32 @@
         $(`#${furn}`).dblclick(()=>{
           window.location.href=`../floorplans/{{floorplan.id}}/furniture/${furn.slice(1)}/rotate/`
         })
-        $(`#l${furn}`).click(()=>{
-          if($(`#${furn}`).hasClass('ui-draggable-disabled')){
-            unlock(furn)
-          }else{
-            lock(furn)
-          }
-            
+        // $(`#l${furn}`).click(()=>{
+        //   if($(`#${furn}`).hasClass('ui-draggable-disabled')){
+        //     unlock(furn)
+        //   }else{
+        //     lock(furn)
+        //   }
+        // })
+        $(`#${furn}`).mousedown(()=>{
+          timeOut = setTimeout(()=>{toggleLock(furn)}, 500)
+        }).bind('mouseup mouseleave mousemove', ()=>{
+          clearTimeout(timeOut)
         })
+
+        
         if(JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").left !== null){
           $(`#${furn}`).css({'left': `${JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").left}px`, 'top': `${JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").top}px`, 'position':'absolute'})
         }
       })
+
+      function toggleLock(furn){
+        if($(`#${furn}`).hasClass('ui-draggable-disabled')){
+            unlock(furn)
+          }else{
+            lock(furn)
+          }
+      }
 
       fpW = {{floorplan.length}}
       fpH = {{floorplan.width}}
