@@ -32,7 +32,6 @@
       .furniture{
           border-radius: 0.1em;
       }
-
       #fp-container{
         position: absolute;
         top:0;
@@ -45,51 +44,24 @@
         opacity: 0.8;
         pointer-events: auto;
       }
-      /* .screen{
-        width: 50%;
-        border: solid;
-        resize: both;
-        overflow: auto;
-      } */
     </style>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Demo</title>
 </head>
 <body>
-    <nav hidden>
-        <div class="nav-wrapper">
-            <ul class="right">
-                <li>
-                    <a href="{% url 'home' %}">Home</a>
-                </li>
-                {% if user.is_authenticated %}
-                <li>
-                    <a href="{% url 'logout' %}">Logout</a>    
-                </li>
-                {% else %}
-                <li>
-                    <a href="{% url 'login' %}">Login</a>
-                </li>
-                <li>
-                    <a href="{% url 'signup' %}">Signup</a>
-                </li>
-                {% endif %}
-            </ul>
-        </div>
-    </nav>
       <p id="fpWidth" hidden>{{floorplan.length}}</p>
       <p id="fpHeight" hidden>{{floorplan.width}}</p>
       <div class="floorplan-demo">
         <div id="fp-container">
         {% for furn in furnitures %}
               {% if furn.rotated == 1 %}
-                <div id="f{{furn.id}}" class="draggable furniture ui-widget-content" style="width: {{furn.length | scale_furniture:floorplan.length}}; height: {{furn.width | scale_furniture:floorplan.width}}; background-color: yellow;">
+                <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{furn.length | scale_furniture:floorplan.length}}; height: {{furn.width | scale_furniture:floorplan.width}}; background-color: yellow;">
                     {{furn.id}}
                     <button id="lf{{furn.id}}">Lock/Unlock</button>
                 </div>
               {% elif furn.rotated == -1 %}
-                <div id="f{{furn.id}}" class="draggable furniture ui-widget-content" style="width: {{ furn.width | scale_furniture:floorplan.length }}; height: {{ furn.length | scale_furniture:floorplan.width }}; background-color: yellow;">
+                <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{ furn.width | scale_furniture:floorplan.length }}; height: {{ furn.length | scale_furniture:floorplan.width }}; background-color: yellow;">
                     {{furn.id}}
                     <button id="lf{{furn.id}}">Lock/Unlock</button>
                 </div>
@@ -99,7 +71,6 @@
                   $('#f{{furn.id}}').draggable({containment: '.floorplan-demo'})
                 })
               </script>
-
         {% endfor %}
 
         <p id="furniture-ids" hidden>
@@ -107,14 +78,7 @@
             #f{{furn.id}}
         {% endfor %}
         </p>
-        <script>
-            $( function(){
-              $('#f{{furn.id}}').draggable({containtment: ".floorplan-demo", stop: function(event, ui){
-                  localStorage.setItem('p{{floor.id}}f{{furn.id}}', JSON.stringify(ui.position))
-                  }
-               })
-            })
-        </script>
+
       </div>
     </div>
 
@@ -128,13 +92,10 @@
             </div>
         {% endfor %}
     </div>
-    <a href="{% url 'furniture_create' %}" class="btn">Add Furniture</a>
-    {% for f in furns %}
-      <p>{{f.rotated}}</p>
-    {% endfor %}
-    {% block content %}
-    {% endblock %}
+
+
     <script>
+
       $('#fp-container').css({'background-size':'calc(100% / {{floorplan.length}}) calc(100% / {{floorplan.width}})','background-image':'linear-gradient(to right, rgb(170, 170, 170) 1px, transparent 1px),linear-gradient(to bottom, rgb(170, 170, 170) 1px, transparent 1px)', 'background-color':'transparent'})
       
       console.log(JSON.parse(localStorage.getItem('p3f4') || "{}"))
@@ -144,8 +105,26 @@
       furnIds = furnIds.split('#')
       furnIds.shift()
       furnIds.forEach((furn, idx)=>{
+        let obstacles = []
+        furnIds.forEach((furn2, idx2)=>{
+            if(furn2 !== furn ){
+              obstacles.push({
+                obstacle: `#${furn2}`, 
+                preventCollision: true 
+              })
+            }
+        })
+        $( function(){
+          $(`#${furn}`).draggable({
+            containment: '.floorplan-demo', 
+            multipleCollisionInteractions: obstacles,
+            stop: function(event, ui){
+                      localStorage.setItem(`p{{floorplan.id}}${furn}`, JSON.stringify(ui.position))
+                  }
+          })
+        })
+
         $(`#${furn}`).dblclick(()=>{
-          // $(`#${furn}`).css({'width':'20%', 'height':'20%'})
           window.location.href=`../floorplans/{{floorplan.id}}/furniture/${furn.slice(1)}/rotate/`
         })
         $(`#l${furn}`).click(()=>{
@@ -155,11 +134,6 @@
             lock(furn)
           }
             
-        })
-        $( function(){
-          $(`#${furn}`).draggable({containtment: ".floorplan-demo", stop: function(event, ui){
-            localStorage.setItem(`p{{floorplan.id}}${furn}`, JSON.stringify(ui.position))
-           }})
         })
         if(JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").left !== null){
           $(`#${furn}`).css({'left': `${JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").left}px`, 'top': `${JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").top}px`, 'position':'absolute'})
@@ -183,7 +157,6 @@
 
       function lock(dragId){
         $(`#${dragId}`).draggable({disabled: true})
-        // $('.ui-state-disabled').removeClass('ui-state-disabled')
       }
       function unlock(dragId){
         $(`#${dragId}`).draggable({disabled: false})
