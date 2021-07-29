@@ -3,11 +3,30 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 # Create your models here.
 
+COLORS=(
+    ('Grey', 'Grey'),
+    ('Brown', 'Brown'),
+    ('Red', 'Red'),
+    ('Orange', 'Orange'),
+    ('Beige', 'Beige'),
+)
+
+FURNITURES=(
+    ('Desk', 'Desk'),
+    ('Bed', 'Bed'),
+    ('Painting','Painting'),
+    ('Chair', 'Chair'),
+    ('Shelf','Shelf'),
+    ('Appliance','Appliance')
+)
+
 class Furniture(models.Model):
     type = models.CharField(max_length=25)
-    length = models.IntegerField()
-    width = models.IntegerField()
-    color = models.CharField(max_length=12)
+    length = models.FloatField()
+    width = models.FloatField()
+    color = models.CharField(max_length=10,
+    choices=COLORS,
+    default=COLORS[0][0])
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -18,8 +37,8 @@ class Furniture(models.Model):
 
 class FloorPlan(models.Model):
     name = models.CharField(max_length=20)
-    length = models.IntegerField()
-    width = models.IntegerField() 
+    length = models.FloatField()
+    width = models.FloatField()
     furnitures = models.ManyToManyField(Furniture, through='LinkedFurniture')
     comment = models.CharField(max_length=50)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -47,5 +66,3 @@ class Photo(models.Model):
     # def get_absolute_url(self):
     #     return reverse('floorplan_index')
          
-
-    

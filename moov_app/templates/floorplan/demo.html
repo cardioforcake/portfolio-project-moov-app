@@ -65,14 +65,12 @@
         <div id="fp-container">
         {% for furn in furnitures %}
               {% if furn.rotated == 1 %}
-                <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{furn.length | scale_furniture:floorplan.length}}; height: {{furn.width | scale_furniture:floorplan.width}}; background-color: yellow; opacity: 0.75;">
-                    {{furn.id}}
-                    <!-- <button id="lf{{furn.id}}">Lock/Unlock</button> -->
+                <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{furn.length | scale_furniture:floorplan.length}}; height: {{furn.width | scale_furniture:floorplan.width}}; background-color: {{furn.color}}; opacity: 0.75;">
+                    {{furn.type}}
                 </div>
               {% elif furn.rotated == -1 %}
-                <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{ furn.width | scale_furniture:floorplan.length }}; height: {{ furn.length | scale_furniture:floorplan.width }}; background-color: yellow; opacity: 0.75;">
-                    {{furn.id}}
-                    <!-- <button id="lf{{furn.id}}">Lock/Unlock</button> -->
+                <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{ furn.width | scale_furniture:floorplan.length }}; height: {{ furn.length | scale_furniture:floorplan.width }}; background-color: {{furn.color}}; opacity: 0.75;">
+                    {{furn.type}}
                 </div>
               {% endif %}
               <script>
@@ -93,12 +91,12 @@
 
     <div>
         {% for furn in furnitures %}
-            <!-- <div class="card">
+            <div class="card">
                 {{furn.type}}
                 <a href="{% url 'furniture_update' furn.id %}" class="btn">Edit</a>
                 <a href="{% url 'furniture_delete' furn.id %}" class="btn">Delete</a>
                 <a href="{% url 'rotate' floorplan.id furn.id %}" class="btn">Rotate</a>
-            </div> -->
+            </div>
         {% endfor %}
     </div>
 

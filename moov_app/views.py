@@ -1,6 +1,6 @@
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.shortcuts import redirect, render
-from .models import FloorPlan, Furniture, Photo, LinkedFurniture
+from .models import FloorPlan, Furniture, Photo, LinkedFurniture, CurrentFloorPlan
 
 # from django.http import HttpResponse
 # from .models import Deck, Card 
@@ -33,7 +33,8 @@ def floorplan_demo(request):
     furns = floorplan.furnitures.all()
     linkedFurniture = LinkedFurniture.objects.filter(floorplan=3)
     for furn in furns:
-      furnitures.append({'id': furn.id, 'type': furn.type, 'width': furn.width, 'length':furn.length, 'color':furn.color, 'rotated':linkedFurniture.get(furniture=furn.id).rotated})
+      furn_type = furn.type[0:2].capitalize()
+      furnitures.append({'id': furn.id, 'type': furn_type, 'width': furn.width, 'length':furn.length, 'color':furn.color, 'rotated':linkedFurniture.get(furniture=furn.id).rotated})
     return render(request, 'floorplan/demo.html', {'furnitures': furnitures, 'floorplan': floorplan})
 
 
@@ -83,19 +84,32 @@ class FurnitureDelete(LoginRequiredMixin, DeleteView):
 def greeting(request):
     return render(request, 'greeting.html')
 
+@login_required
 def home(request):
-    return render(request, 'home.html')
+    currentfp = CurrentFloorPlan.objects.get(user=request.user).currentfloorplan
+    return render(request, 'home.html', {'currentfp': currentfp})
 
 def floorplan_index(request):
   floorplans = FloorPlan.objects.all()
   return render(request, 'floorplan/floorplan_index.html', {'floorplans': floorplans})
 
+@login_required
 def floorplan_details(request, floorplan_id):
   floorplan = FloorPlan.objects.get(id=floorplan_id)
+  if len(CurrentFloorPlan.objects.filter(user=request.user)) == 0:
+    curr = CurrentFloorPlan(user=request.user, currentfloorplan = floorplan)
+    curr.save()
+    currentfp = CurrentFloorPlan.objects.get(user=request.user).currentfloorplan
+  else:
+    curr = CurrentFloorPlan.objects.get(user=request.user)
+    curr.currentfloorplan = floorplan
+    curr.save()
+    currentfp = CurrentFloorPlan.objects.get(user=request.user).currentfloorplan
   furnitures_floorplan_doesnt_have = Furniture.objects.exclude(id__in = floorplan.furnitures.all().values_list('id'))
   return render(request, 'floorplan/floorplan_details.html', {
     "floorplan":floorplan,
     "furnitures": furnitures_floorplan_doesnt_have,
+    "currentfp": currentfp,
   })
 
 def assoc_furniture(request, floorplan_id, furniture_id):
@@ -106,9 +120,11 @@ def remove_furniture(request, floorplan_id, furniture_id):
   FloorPlan.objects.get(id=floorplan_id).furnitures.remove(furniture_id)
   return redirect("floorplan_details", floorplan_id = floorplan_id)
   
-
-
-
+def rotate_furniture(request, floorplan_id, furniture_id):
+  linked = LinkedFurniture.objects.filter(floorplan=floorplan_id).get(furniture=furniture_id)
+  linked.rotated *= -1
+  linked.save()
+  return redirect('demo')
 
 
 
@@ -132,14 +148,6 @@ class FloorPlanUpdate(LoginRequiredMixin,UpdateView):
 class FloorplanDelete(LoginRequiredMixin,DeleteView):
     model = FloorPlan
     success_url = '/floorplans/'
-
-  
-  
-def rotate_furniture(request, floorplan_id, furniture_id):
-  linked = LinkedFurniture.objects.filter(floorplan=floorplan_id).get(furniture=furniture_id)
-  linked.rotated *= -1
-  linked.save()
-  return redirect('demo')
 
 
 def add_photo(request, floorplan_id):
