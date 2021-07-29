@@ -27,9 +27,23 @@
         background-size:auto;
         object-fit: scale-down;
         margin: auto;
+        position: relative
       }
       .furniture{
           border-radius: 0.1em;
+      }
+
+      #fp-container{
+        position: absolute;
+        top:0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+      .ui-state-disabled {
+        background-image: none;
+        opacity: 0.8;
+        pointer-events: auto;
       }
       /* .screen{
         width: 50%;
@@ -67,33 +81,32 @@
       <p id="fpWidth" hidden>{{floorplan.length}}</p>
       <p id="fpHeight" hidden>{{floorplan.width}}</p>
       <div class="floorplan-demo">
+        <div id="fp-container">
         {% for furn in furnitures %}
               {% if furn.rotated == 1 %}
-                <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{ furn.length | scale_furniture:floorplan.length }}; height: {{ furn.width | scale_furniture:floorplan.width }}; background-color: yellow;">
+                <div id="f{{furn.id}}" class="draggable furniture ui-widget-content" style="width: {{furn.length | scale_furniture:floorplan.length}}; height: {{furn.width | scale_furniture:floorplan.width}}; background-color: yellow;">
                     {{furn.id}}
+                    <button id="lf{{furn.id}}">Lock/Unlock</button>
                 </div>
               {% elif furn.rotated == -1 %}
-                <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{ furn.width | scale_furniture:floorplan.length }}; height: {{ furn.length | scale_furniture:floorplan.width }}; background-color: yellow;">
+                <div id="f{{furn.id}}" class="draggable furniture ui-widget-content" style="width: {{ furn.width | scale_furniture:floorplan.length }}; height: {{ furn.length | scale_furniture:floorplan.width }}; background-color: yellow;">
                     {{furn.id}}
+                    <button id="lf{{furn.id}}">Lock/Unlock</button>
                 </div>
               {% endif %}
+              <script>
+                $( function(){
+                  $('#f{{furn.id}}').draggable({containment: '.floorplan-demo'})
+                })
+              </script>
 
-              {% for furn2 in furnitures %}
-                {% if furn2.id != furn.id%}
-                <script>
-                  $( function() {
-                      $( '#f{{furn.id}}' ).draggable({containment: ".floorplan-demo", obstacle: '#f{{furn2.id}}', preventCollision: true});
-                  } );
-                </script>
-                {% endif %}
-              {% endfor %}
         {% endfor %}
+
         <p id="furniture-ids" hidden>
         {% for furn in furnitures %}
             #f{{furn.id}}
         {% endfor %}
         </p>
-        {% for furn in furnitures %}
         <script>
             $( function(){
               $('#f{{furn.id}}').draggable({containtment: ".floorplan-demo", stop: function(event, ui){
@@ -102,7 +115,7 @@
                })
             })
         </script>
-        {% endfor %}
+      </div>
     </div>
 
     <div>
@@ -122,6 +135,8 @@
     {% block content %}
     {% endblock %}
     <script>
+      $('#fp-container').css({'background-size':'calc(100% / {{floorplan.length}}) calc(100% / {{floorplan.width}})','background-image':'linear-gradient(to right, rgb(170, 170, 170) 1px, transparent 1px),linear-gradient(to bottom, rgb(170, 170, 170) 1px, transparent 1px)', 'background-color':'transparent'})
+      
       console.log(JSON.parse(localStorage.getItem('p3f4') || "{}"))
       console.log(JSON.parse(localStorage.getItem('p3f5') || "{}"))
       furnIds = $('#furniture-ids').text()
@@ -129,13 +144,25 @@
       furnIds = furnIds.split('#')
       furnIds.shift()
       furnIds.forEach((furn, idx)=>{
+        $(`#${furn}`).dblclick(()=>{
+          // $(`#${furn}`).css({'width':'20%', 'height':'20%'})
+          window.location.href=`../floorplans/{{floorplan.id}}/furniture/${furn.slice(1)}/rotate/`
+        })
+        $(`#l${furn}`).click(()=>{
+          if($(`#${furn}`).hasClass('ui-draggable-disabled')){
+            unlock(furn)
+          }else{
+            lock(furn)
+          }
+            
+        })
         $( function(){
           $(`#${furn}`).draggable({containtment: ".floorplan-demo", stop: function(event, ui){
             localStorage.setItem(`p{{floorplan.id}}${furn}`, JSON.stringify(ui.position))
            }})
         })
         if(JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").left !== null){
-          $(`#${furn}`).css({'left': `${JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").left}px`, 'top': `${JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").top}px`})
+          $(`#${furn}`).css({'left': `${JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").left}px`, 'top': `${JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").top}px`, 'position':'absolute'})
         }
       })
 
@@ -156,15 +183,10 @@
 
       function lock(dragId){
         $(`#${dragId}`).draggable({disabled: true})
+        // $('.ui-state-disabled').removeClass('ui-state-disabled')
       }
       function unlock(dragId){
         $(`#${dragId}`).draggable({disabled: false})
-      }
-      function tog(dragId){
-        $(`#${dragId}`).toggleClass("ui-draggable-disabled")
-      }
-      function addbackground(id){
-        $(`#${id}`).toggleClass("red")
       }
       </script>
 </body>
