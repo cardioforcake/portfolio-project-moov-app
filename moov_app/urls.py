@@ -22,6 +22,7 @@ urlpatterns = [
     path('furniture/<int:pk>/update/', views.FurnitureUpdate.as_view(), name='furniture_update'),
     path('furniture/<int:pk>/delete/', views.FurnitureDelete.as_view(), name='furniture_delete'),
     path('floorplandemo/', views.floorplan_demo, name='demo'),
+    path('demonav/', views.demo_nav, name='demo_nav'),
 
     path('floorplans/<int:floorplan_id>/add_photo/', views.add_photo, name='add_photo'),
 

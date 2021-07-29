@@ -36,6 +36,17 @@ def floorplan_demo(request):
       furnitures.append({'id': furn.id, 'type': furn.type, 'width': furn.width, 'length':furn.length, 'color':furn.color, 'rotated':linkedFurniture.get(furniture=furn.id).rotated})
     return render(request, 'floorplan/demo.html', {'furnitures': furnitures, 'floorplan': floorplan})
 
+
+def demo_nav(request):
+    furnitures2 = []
+    floorplan2 = FloorPlan.objects.get(id=3)
+    furns2 = floorplan2.furnitures.all()
+    linkedFurniture = LinkedFurniture.objects.filter(floorplan=3)
+    for furn in furns2:
+      furnitures2.append({'id': furn.id, 'type': furn.type, 'width': furn.width, 'length':furn.length, 'color':furn.color, 'rotated':linkedFurniture.get(furniture=furn.id).rotated})
+    return render(request, 'floorplan/demo-nav.html', {'furnitures': furnitures2, 'floorplan': floorplan2})
+
+
 def signup(request):
   error_message = ''
   if request.method == 'POST':
