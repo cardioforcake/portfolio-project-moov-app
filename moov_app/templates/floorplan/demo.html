@@ -5,16 +5,13 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <link rel="stylesheet" type="text/css" href="{% static 'css/demo.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="{% static 'jquidragcollide/jquery-1.8.3.min.js' %}"></script>
     <script src="{% static 'jquidragcollide/ui/jquery.ui.core.js' %}"></script>
     <script src="{% static 'jquidragcollide/ui/jquery.ui.widget.js' %}"></script>
     <script src="{% static 'jquidragcollide/ui/jquery.ui.mouse.js' %}"></script>
@@ -22,11 +19,10 @@
     <script src="{% static 'jquidragcollide/jquery-collision.min.js' %}"></script>
     <script src="{% static 'jquidragcollide/jquery-ui-draggable-collision.min.js' %}"></script>
     <style>
-      .floorplan-demo{
+      #floorplan{
         border: solid;
         background-size:auto;
         object-fit: scale-down;
-        margin: auto;
         position: relative
       }
       .furniture{
@@ -41,8 +37,15 @@
       }
       .ui-state-disabled {
         background-image: none;
-        opacity: 0.8;
+        opacity: 1 !important;
         pointer-events: auto;
+      }
+      #screen{
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
     </style>
 
@@ -50,25 +53,24 @@
     <title>Demo</title>
 </head>
 <body>
-      <p id="fpWidth" hidden>{{floorplan.length}}</p>
-      <p id="fpHeight" hidden>{{floorplan.width}}</p>
-      <div class="floorplan-demo">
+  <div id='screen'>
+      <div id="floorplan">
         <div id="fp-container">
         {% for furn in furnitures %}
               {% if furn.rotated == 1 %}
-                <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{furn.length | scale_furniture:floorplan.length}}; height: {{furn.width | scale_furniture:floorplan.width}}; background-color: yellow;">
+                <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{furn.length | scale_furniture:floorplan.length}}; height: {{furn.width | scale_furniture:floorplan.width}}; background-color: yellow; opacity: 0.75;">
                     {{furn.id}}
                     <!-- <button id="lf{{furn.id}}">Lock/Unlock</button> -->
                 </div>
               {% elif furn.rotated == -1 %}
-                <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{ furn.width | scale_furniture:floorplan.length }}; height: {{ furn.length | scale_furniture:floorplan.width }}; background-color: yellow;">
+                <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{ furn.width | scale_furniture:floorplan.length }}; height: {{ furn.length | scale_furniture:floorplan.width }}; background-color: yellow; opacity: 0.75;">
                     {{furn.id}}
                     <!-- <button id="lf{{furn.id}}">Lock/Unlock</button> -->
                 </div>
               {% endif %}
               <script>
                 $( function(){
-                  $('#f{{furn.id}}').draggable({containment: '.floorplan-demo'})
+                  $('#f{{furn.id}}').draggable({containment: '#floorplan'})
                 })
               </script>
         {% endfor %}
@@ -84,15 +86,15 @@
 
     <div>
         {% for furn in furnitures %}
-            <div class="card">
+            <!-- <div class="card">
                 {{furn.type}}
                 <a href="{% url 'furniture_update' furn.id %}" class="btn">Edit</a>
                 <a href="{% url 'furniture_delete' furn.id %}" class="btn">Delete</a>
                 <a href="{% url 'rotate' floorplan.id furn.id %}" class="btn">Rotate</a>
-            </div>
+            </div> -->
         {% endfor %}
     </div>
-
+  </div>
 
     <script>
 
@@ -104,6 +106,10 @@
       furnIds.shift()
       furnIds.forEach((furn, idx)=>{
         let obstacles = []
+        let locked = false
+        if(localStorage.getItem(`p{{floorplan.id}}${furn}lock`) === 'locked'){
+          locked = true
+        }
         furnIds.forEach((furn2, idx2)=>{
             if(furn2 !== furn ){
               obstacles.push({
@@ -114,26 +120,22 @@
         })
         $( function(){
           $(`#${furn}`).draggable({
-            containment: '.floorplan-demo', 
+            containment: '#floorplan', 
             multipleCollisionInteractions: obstacles,
             stop: function(event, ui){
                       localStorage.setItem(`p{{floorplan.id}}${furn}`, JSON.stringify(ui.position))
-                  }
+                  },
+            disabled: locked,
           })
         })
 
         $(`#${furn}`).dblclick(()=>{
-          window.location.href=`../floorplans/{{floorplan.id}}/furniture/${furn.slice(1)}/rotate/`
+          if(localStorage.getItem(`p{{floorplan.id}}${furn}lock`) === 'unlocked'){
+            window.location.href=`../floorplans/{{floorplan.id}}/furniture/${furn.slice(1)}/rotate/`
+          }
         })
-        // $(`#l${furn}`).click(()=>{
-        //   if($(`#${furn}`).hasClass('ui-draggable-disabled')){
-        //     unlock(furn)
-        //   }else{
-        //     lock(furn)
-        //   }
-        // })
         $(`#${furn}`).mousedown(()=>{
-          timeOut = setTimeout(()=>{toggleLock(furn)}, 500)
+          timeOut = setTimeout(()=>{toggleLock(furn)}, 750)
         }).bind('mouseup mouseleave mousemove', ()=>{
           clearTimeout(timeOut)
         })
@@ -147,8 +149,10 @@
       function toggleLock(furn){
         if($(`#${furn}`).hasClass('ui-draggable-disabled')){
             unlock(furn)
+            localStorage.setItem(`p{{floorplan.id}}${furn}lock`, 'unlocked')
           }else{
             lock(furn)
+            localStorage.setItem(`p{{floorplan.id}}${furn}lock`, 'locked')
           }
       }
 
@@ -159,9 +163,9 @@
         scrnW = window.innerWidth
         scrnH = window.innerHeight
         if((scrnW/scrnH) > (Number(fpW)/Number(fpH))){
-          $('.floorplan-demo').css({'height' : '90vh', 'width': `${Number(fpW)/Number(fpH)*90}vh`})
+          $('#floorplan').css({'height' : '90vh', 'width': `${Number(fpW)/Number(fpH)*90}vh`})
         }else(
-          $('.floorplan-demo').css({'width' : '90vw', 'height': `${Number(fpH)/Number(fpW)*90}vw`})
+          $('#floorplan').css({'width' : '90vw', 'height': `${Number(fpH)/Number(fpW)*90}vw`})
         )
       }
       resizeFloorPlan()
