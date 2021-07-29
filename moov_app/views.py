@@ -86,8 +86,8 @@ def greeting(request):
 
 @login_required
 def home(request):
-    currentfp = CurrentFloorPlan.objects.get(user=request.user).currentfloorplan
-    return render(request, 'home.html', {'currentfp': currentfp})
+    currentFP = CurrentFloorPlan.objects.get(user=request.user).currentfloorplan
+    return render(request, 'home.html', {'currentFP': currentFP})
 
 def floorplan_index(request):
   floorplans = FloorPlan.objects.all()
@@ -99,17 +99,17 @@ def floorplan_details(request, floorplan_id):
   if len(CurrentFloorPlan.objects.filter(user=request.user)) == 0:
     curr = CurrentFloorPlan(user=request.user, currentfloorplan = floorplan)
     curr.save()
-    currentfp = CurrentFloorPlan.objects.get(user=request.user).currentfloorplan
+    currentFP = CurrentFloorPlan.objects.get(user=request.user).currentfloorplan
   else:
     curr = CurrentFloorPlan.objects.get(user=request.user)
     curr.currentfloorplan = floorplan
     curr.save()
-    currentfp = CurrentFloorPlan.objects.get(user=request.user).currentfloorplan
+    currentFP = CurrentFloorPlan.objects.get(user=request.user).currentfloorplan
   furnitures_floorplan_doesnt_have = Furniture.objects.exclude(id__in = floorplan.furnitures.all().values_list('id'))
   return render(request, 'floorplan/floorplan_details.html', {
     "floorplan":floorplan,
     "furnitures": furnitures_floorplan_doesnt_have,
-    "currentfp": currentfp,
+    "currentFP": currentFP,
   })
 
 def assoc_furniture(request, floorplan_id, furniture_id):
