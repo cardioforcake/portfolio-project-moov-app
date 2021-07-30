@@ -91,12 +91,12 @@
 
     <div>
         {% for furn in furnitures %}
-            <div class="card">
+            <!-- <div class="card">
                 {{furn.type}}
                 <a href="{% url 'furniture_update' furn.id %}" class="btn">Edit</a>
                 <a href="{% url 'furniture_delete' furn.id %}" class="btn">Delete</a>
                 <a href="{% url 'rotate' floorplan.id furn.id %}" class="btn">Rotate</a>
-            </div>
+            </div> -->
         {% endfor %}
     </div>
 
@@ -128,10 +128,43 @@
 
       $('#fp-container').css({'background-size':'calc(100% / {{floorplan.length}}) calc(100% / {{floorplan.width}})','background-image':'linear-gradient(to right, rgb(170, 170, 170) 1px, transparent 1px),linear-gradient(to bottom, rgb(170, 170, 170) 1px, transparent 1px)', 'background-color':'transparent'})
       
+      fpW = {{floorplan.length}}
+      fpH = {{floorplan.width}}
+
       furnIds = $('#furniture-ids').text()
       furnIds = furnIds.replace(/\r\n|\n| /g, '')
       furnIds = furnIds.split('#')
       furnIds.shift()
+
+      function resizeFloorPlan(){
+        scrnW = window.innerWidth
+        scrnH = window.innerHeight
+        if((scrnW/scrnH) > (Number(fpW)/Number(fpH))){
+          $('#floorplan').css({'height' : '90vh', 'width': `${Number(fpW)/Number(fpH)*90}vh`})
+        }else(
+          $('#floorplan').css({'width' : '90vw', 'height': `${Number(fpH)/Number(fpW)*90}vw`})
+        )
+      }
+
+      function placeFurniture(furnId){
+        furnId.forEach((furn)=>{
+          if(JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").left !== null){
+            fp = $('#floorplan')
+            $(`#${furn}`).css({'left': `${JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").left*fp.innerWidth()}px`, 'top': `${JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").top*fp.innerHeight()}px`, 'position':'absolute'})
+          }
+        })
+      }
+
+      
+
+      resizeFloorPlan()
+
+      $(window).resize(()=>{
+        resizeFloorPlan(),
+        placeFurniture(furnIds)
+      })
+
+
       furnIds.forEach((furn, idx)=>{
         let obstacles = []
         let locked = false
@@ -151,8 +184,10 @@
             containment: '#floorplan', 
             multipleCollisionInteractions: obstacles,
             stop: function(event, ui){
-                      localStorage.setItem(`p{{floorplan.id}}${furn}`, JSON.stringify(ui.position))
-                  },
+                      let left = ui.position.left/$('#floorplan').innerWidth()
+                      let top = ui.position.top/$('#floorplan').innerHeight()
+                      localStorage.setItem(`p{{floorplan.id}}${furn}`, JSON.stringify({'left': left, 'top': top}))
+                    },
             disabled: locked,
           })
         })
@@ -167,12 +202,9 @@
         }).bind('mouseup mouseleave mousemove', ()=>{
           clearTimeout(timeOut)
         })
-
-        
-        if(JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").left !== null){
-          $(`#${furn}`).css({'left': `${JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").left}px`, 'top': `${JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").top}px`, 'position':'absolute'})
-        }
       })
+
+      placeFurniture(furnIds)
 
       function toggleLock(furn){
         if($(`#${furn}`).hasClass('ui-draggable-disabled')){
@@ -184,20 +216,7 @@
           }
       }
 
-      fpW = {{floorplan.length}}
-      fpH = {{floorplan.width}}
 
-      function resizeFloorPlan(){
-        scrnW = window.innerWidth
-        scrnH = window.innerHeight
-        if((scrnW/scrnH) > (Number(fpW)/Number(fpH))){
-          $('#floorplan').css({'height' : '90vh', 'width': `${Number(fpW)/Number(fpH)*90}vh`})
-        }else(
-          $('#floorplan').css({'width' : '90vw', 'height': `${Number(fpH)/Number(fpW)*90}vw`})
-        )
-      }
-      resizeFloorPlan()
-      $(window).resize(resizeFloorPlan)
 
       function lock(dragId){
         $(`#${dragId}`).draggable({disabled: true})
