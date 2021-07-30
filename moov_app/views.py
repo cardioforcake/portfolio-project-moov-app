@@ -89,7 +89,7 @@ def home(request):
     if len(CurrentFloorPlan.objects.filter(user=request.user)) != 0:
       currentFP = CurrentFloorPlan.objects.get(user=request.user).currentfloorplan
     else:
-      currentFP = {}
+      currentFP = 0
     return render(request, 'home.html', {'currentFP': currentFP})
 
 def floorplan_index(request):
