@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="title border border-dark w-100 text-center">
+  <h1>Detail</h1>
+  <h3>floorplan id: {{currentFP.id}}</h3>
+</div>
+
+{% for fp in floorplan.photo_set.all %}
+<!-- TESTING -->
+<div>
+  <h3>name of floorplan: {{floorplan.name}}</h3>
+  <h3>length of floorplan: {{floorplan.length}}</h3>
+  <h3>width of floorplan: {{floorplan.width}}</h3>
+  <h3>name of floorplan: {{floorplan.name}}</h3>
+</div>
+
+<img src="{{fp.url}}" alt="" class="responsive-img card-panel">
+
+{% empty %}
+<div class="card-panel teal-text center-align">No Photos Uploaded</div>
+
+{% endfor %}
+
+<form class="card-panel" action="{% url 'add_photo' floorplan.id %}" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  <input type="file" name="photo-file">
+  <br>
+  <br>
+
+  <input type="submit" value="upload floorplan" class="btn">
+
+</form>
+
+<!--  furniture section -->
+<div class="row">
+  <div class="col s6">
+    <h3>{{ floorplan.name }}'s furniture</h3>
+  </div>
+  {% if floorplan.furnitures.count %}
+  {% for furn in floorplan.furnitures.all %}
+  <div class="card">
+    <div class="card-content">
+      <span class="card-title">
+        A <span style="color: {{ furn.color }}">{{ furn.color }}</span> {{ furn.type }}
+      </span>
+    </div>
+    <div class="card-action">
+      <form action="{% url 'remove_furniture' floorplan.id furn.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn">Remove</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+  {% else %}
+  <h5>No furniture :(</h5>
+  {% endif %}
+</div>
+<div class="col s6">
+  <h3>Available Furniture</h3>
+  {% if furnitures.count %}
+  {% for furn in furnitures.all %}
+  <div class="card">
+    <div class="card-content">
+      <span class="card-title">
+        A <span style="color: {{ furn.color }}">{{ furn.color }}</span> {{ furn.name }}
+      </span>
+    </div>
+    <div class="card-action">
+      <form action="{% url 'assoc_furniture' floorplan.id furn.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn">Add</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+  {% else %}
+  <h5>{{cat.name}} Already Has All Toys Available</h5>
+  {% endif %}
+</div>
+
+<button>
+  Add Furniture
+</button>
+<button>
+  Delete Furniture
+</button>
+
+{% endblock %}

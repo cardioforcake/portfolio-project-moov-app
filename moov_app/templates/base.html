@@ -32,7 +32,7 @@
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="{% url 'home' %}">Home</a>
                         <a class="dropdown-item" href="{% url 'furniture_create' %}">Add Furniture</a>
-                        <a class="dropdown-item" href="{% url 'demo' %}">demo</a>
+                        <a class="dropdown-item" href="{% url 'floorplan_details' 3 %}">demo</a>
                         {% if user.is_authenticated %}
                         <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                         {% else %}

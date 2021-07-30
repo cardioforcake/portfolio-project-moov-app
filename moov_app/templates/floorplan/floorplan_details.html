@@ -1,90 +1,341 @@
-{% extends 'base.html' %}
+{% load static %}
 
-{% block content %}
-<div class="title border border-dark w-100 text-center">
-  <h1>Detail</h1>
-  <h3>floorplan id: {{currentFP.id}}</h3>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/demo.css' %}">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="{% static 'jquidragcollide/ui/jquery.ui.core.js' %}"></script>
+    <script src="{% static 'jquidragcollide/ui/jquery.ui.widget.js' %}"></script>
+    <script src="{% static 'jquidragcollide/ui/jquery.ui.mouse.js' %}"></script>
+    <script src="{% static 'jquidragcollide/ui/jquery.ui.draggable.js' %}"></script>
+    <script src="{% static 'jquidragcollide/jquery-collision.min.js' %}"></script>
+    <script src="{% static 'jquidragcollide/jquery-ui-draggable-collision.min.js' %}"></script>
+    <style>
+      #floorplan{
+        border: solid;
+        background-size:auto;
+        object-fit: scale-down;
+        position: relative;
+        margin-top: 1vh;
+        background-color: rgb(255, 255, 255,0.3);
+      }
+      .furniture{
+          border-radius: 0.1em;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 2vw;
+          font-weight: 800;
+          color: white;
+          overflow: hidden;
+      }
+      #fp-container{
+        position: absolute;
+        top:0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+      .ui-state-disabled {
+        background-image: none;
+        opacity: 1 !important;
+        pointer-events: auto;
+      }
+      #screen{
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        background-color: grey;
+      }
+      footer{
+        position: absolute;
+        bottom: 0;
+        width: 100vw;
+      }
+      .footer{
+        z-index: 2;
+        margin:auto;
+      }
+      .bar{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        background-color: black;
+      }
+      .bar>a{
+        display: flex;
+        justify-content: center;
+        max-width: 25%;
+        font-weight: 500;
+        font-size: 1.5rem;
+      }
+      .trigger{
+        margin: auto;
+      }
+      .trigger-container{
+        height: 12vh;
+        display: flex;
+        justify-content: center;
+      }
+      .trigger-btn{
+        height: 100%;
+        background-color: black;
+      }
+      #help-content{
+        height: 65vh;
+      }
+      #furniture-content{
+        height: 70vh;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        overflow-y: scroll;
+        width: 32vw;
+        background-color: rgb(165, 165, 165);
+      }
+      .furn{
+        width: 10vw;
+        height: 10vw;
+        margin: 2vw 2vw 2vw 2vw;
+      }
 
-{% for fp in floorplan.photo_set.all %}
-<!-- TESTING -->
-<div>
-  <h3>name of floorplan: {{floorplan.name}}</h3>
-  <h3>length of floorplan: {{floorplan.length}}</h3>
-  <h3>width of floorplan: {{floorplan.width}}</h3>
-  <h3>name of floorplan: {{floorplan.name}}</h3>
-</div>
+      .modal, .modal-content{
+        margin: 0 auto;
+      }
+    </style>
 
-<img src="{{fp.url}}" alt="" class="responsive-img card-panel">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo</title>
+</head>
+<body>
+  <div id='screen'>
+      <div id="floorplan">
+        <div id="fp-container">
+        {% for furn in furnitures %}
+              {% if furn.rotated == 1 %}
+                <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{furn.length | scale_furniture:floorplan.length}}; height: {{furn.width | scale_furniture:floorplan.width}}; background-color: {{furn.color}}; opacity: 0.75;">
+                    {{furn.type}}
+                </div>
+              {% elif furn.rotated == -1 %}
+                <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{ furn.width | scale_furniture:floorplan.length }}; height: {{ furn.length | scale_furniture:floorplan.width }}; background-color: {{furn.color}}; opacity: 0.75;">
+                    {{furn.type}}
+                </div>
+              {% endif %}
+              <script>
+                $( function(){
+                  $('#f{{furn.id}}').draggable({containment: '#floorplan'})
+                })
+              </script>
+        {% endfor %}
 
-{% empty %}
-<div class="card-panel teal-text center-align">No Photos Uploaded</div>
+        <p id="furniture-ids" style="display: none" hidden>
+        {% for furn in furnitures %}
+            #f{{furn.id}}
+        {% endfor %}
+        </p>
+        <p id="all-furniture-ids" style="display: none" hidden>
+          {% for furn in allFurnitures %}
+              #f{{furn.id}}
+          {% endfor %}
+        </p>
 
-{% endfor %}
+      </div>
+    </div>
 
-<form class="card-panel" action="{% url 'add_photo' floorplan.id %}" method="POST" enctype="multipart/form-data">
-  {% csrf_token %}
-  <input type="file" name="photo-file">
-  <br>
-  <br>
+    <div class="modal fade" id="help-modal" tabindex="-1" aria-labelledby="helpLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content" id="help-content">
+            This is the help page!
+        </div>
+      </div>
+    </div>
 
-  <input type="submit" value="upload floorplan" class="btn">
+    <div class="modal fade" id="furniture-modal" tabindex="-1" aria-labelledby="helpLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content" id="furniture-content">
+            {% for furn in allFurnitures %}
+              <button id="incldf{{furn.id}}" class="furn" style="background-color: {{furn.color}}; border-radius: 0.3vw;">
+                {{furn.type}}
+                {{furn.length}}
+                {{furn.width}}
+              </button>
+            {% endfor %}
+        </div>
+      </div>
+    </div>
 
-</form>
-
-<!--  furniture section -->
-<div class="row">
-  <div class="col s6">
-    <h3>{{ floorplan.name }}'s furniture</h3>
   </div>
-  {% if floorplan.furnitures.count %}
-  {% for furn in floorplan.furnitures.all %}
-  <div class="card">
-    <div class="card-content">
-      <span class="card-title">
-        A <span style="color: {{ furn.color }}">{{ furn.color }}</span> {{ furn.type }}
-      </span>
+  <footer>
+    <div class="footer">
+      <!-- <div class="pos-f-t"> -->
+        <div class="collapse" id="navbarToggleExternalContent">
+          <div class="p-4 bar">
+                  <a class="dropdown-item text-white btn btn-primary furniture-modal" href="#">Furniture</a>
+                  <a class="dropdown-item text-white btn btn-primary" href="{% url 'home' %}">Home</a>
+                  <a class="dropdown-item text-white btn btn-primary help-modal" href="#">Help</a>
+          </div>
+        </div>
+      <!-- </div> -->
+      <nav class="navbar navbar-dark trigger-container">
+          <!-- <div class="container-fluid"> -->
+              <button class="navbar-toggler trigger-btn" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
+                   >
+                  <span class="navbar-toggler-icon trigger"></span>
+              </button>
+          <!-- </div> -->
+      </nav>
     </div>
-    <div class="card-action">
-      <form action="{% url 'remove_furniture' floorplan.id furn.id %}" method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn">Remove</button>
-      </form>
-    </div>
-  </div>
-  {% endfor %}
-  {% else %}
-  <h5>No furniture :(</h5>
-  {% endif %}
-</div>
-<div class="col s6">
-  <h3>Available Furniture</h3>
-  {% if furnitures.count %}
-  {% for furn in furnitures.all %}
-  <div class="card">
-    <div class="card-content">
-      <span class="card-title">
-        A <span style="color: {{ furn.color }}">{{ furn.color }}</span> {{ furn.name }}
-      </span>
-    </div>
-    <div class="card-action">
-      <form action="{% url 'assoc_furniture' floorplan.id furn.id %}" method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn">Add</button>
-      </form>
-    </div>
-  </div>
-  {% endfor %}
-  {% else %}
-  <h5>{{cat.name}} Already Has All Toys Available</h5>
-  {% endif %}
-</div>
+  </footer>
 
-<button>
-  Add Furniture
-</button>
-<button>
-  Delete Furniture
-</button>
 
-{% endblock %}
+
+  <script>
+
+    $('#fp-container').css({'background-size':'calc(100% / {{floorplan.length}}) calc(100% / {{floorplan.width}})','background-image':'linear-gradient(to right, rgb(200, 200, 200) 1px, transparent 1px),linear-gradient(to bottom, rgb(200, 200, 200) 1px, transparent 1px)', 'background-color':'transparent'})
+    
+    fpW = {{floorplan.length}}
+    fpH = {{floorplan.width}}
+
+    furnIds = $('#furniture-ids').text()
+    furnIds = furnIds.replace(/\r\n|\n| /g, '')
+    furnIds = furnIds.split('#')
+    furnIds.shift()
+
+    allFurnIds = $('#all-furniture-ids').text()
+    allFurnIds = allFurnIds.replace(/\r\n|\n| /g, '')
+    allFurnIds = allFurnIds.split('#')
+    allFurnIds.shift()
+
+    function resizeFloorPlan(){
+      scrnW = window.innerWidth
+      scrnH = window.innerHeight
+      if((scrnW/scrnH) > (Number(fpW)/Number(fpH))){
+        $('#floorplan').css({'height' : '88vh', 'width': `${Number(fpW)/Number(fpH)*88}vh`})
+        $('.trigger-btn').css('width', `${Number(fpW)/Number(fpH)*88}vh`)
+      }else{
+        $('#floorplan').css({'width' : '88vw', 'height': `${Number(fpH)/Number(fpW)*88}vw`})
+        $('.trigger-btn').css('width', '88vw')
+      }
+    }
+
+    function placeFurniture(furnId){
+      furnId.forEach((furn)=>{
+        if(JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").left !== null){
+          fp = $('#floorplan')
+          $(`#${furn}`).css({'left': `${JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").left*fp.innerWidth()}px`, 'top': `${JSON.parse(localStorage.getItem(`p{{floorplan.id}}${furn}`) || "{}").top*fp.innerHeight()}px`, 'position':'absolute'})
+        }
+      })
+    }
+
+    resizeFloorPlan()
+
+    $(window).resize(()=>{
+      resizeFloorPlan(),
+      placeFurniture(furnIds)
+    })
+
+
+    furnIds.forEach((furn, idx)=>{
+      let obstacles = []
+      let locked = false
+      let timeOut
+      if(localStorage.getItem(`p{{floorplan.id}}${furn}lock`) === 'locked'){
+        locked = true
+      }
+      furnIds.forEach((furn2, idx2)=>{
+          if(furn2 !== furn ){
+            obstacles.push({
+              obstacle: `#${furn2}`, 
+              preventCollision: true 
+            })
+          }
+      })
+      $( function(){
+        $(`#${furn}`).draggable({
+          containment: '#floorplan', 
+          multipleCollisionInteractions: obstacles,
+          stop: function(event, ui){
+                    let left = ui.position.left/$('#floorplan').innerWidth()
+                    let top = ui.position.top/$('#floorplan').innerHeight()
+                    localStorage.setItem(`p{{floorplan.id}}${furn}`, JSON.stringify({'left': left, 'top': top}))
+                  },
+          disabled: locked,
+        })
+      })
+
+      $(`#${furn}`).dblclick(()=>{
+        if(localStorage.getItem(`p{{floorplan.id}}${furn}lock`) !== 'locked'){
+          window.location.href=`../floorplans/{{floorplan.id}}/furniture/${furn.slice(1)}/rotate/`
+        }
+      })
+      $(`#${furn}`).mousedown(()=>{
+        timeOut = setTimeout(()=>{toggleLock(furn)}, 700)
+      }).bind('mouseup mouseleave mousemove', ()=>{
+        clearTimeout(timeOut)
+      })
+    })
+
+    allFurnIds.forEach((furn)=>{
+      if(furnIds.includes(furn)){
+        $(`#incld${furn}`).css({'border-width':'0.5vw', 'border-color': 'yellow'})
+        $(`#incld${furn}`).mousedown(()=>{
+          timeOut = setTimeout(()=>{
+                                  window.location.href=`../floorplans/{{floorplan.id}}/unassoc_furniture/${furn.slice(1)}/`
+                              }, 700)
+        }).bind('mouseup mouseleave mousemove', ()=>{
+        clearTimeout(timeOut)
+        })
+      }else{
+        $(`#incld${furn}`).css({'border-width':'2px', 'border-color': 'none'})
+        $(`#incld${furn}`).mousedown(()=>{
+          timeOut = setTimeout(()=>{
+                                  window.location.href=`../floorplans/{{floorplan.id}}/assoc_furniture/${furn.slice(1)}/`
+                              }, 700)
+        }).bind('mouseup mouseleave mousemove', ()=>{
+        clearTimeout(timeOut)
+        })
+      }
+    })
+
+    placeFurniture(furnIds)
+
+    $('.help-modal').on('click', function (e) {
+        e.preventDefault();
+        $('#help-modal').modal('show');
+    });
+
+    $('.furniture-modal').on('click', function (e) {
+        e.preventDefault();
+        $('#furniture-modal').modal('show');
+    });
+
+    function toggleLock(furn){
+      if($(`#${furn}`).hasClass('ui-draggable-disabled')){
+          unlock(furn)
+          localStorage.setItem(`p{{floorplan.id}}${furn}lock`, 'unlocked')
+        }else{
+          lock(furn)
+          localStorage.setItem(`p{{floorplan.id}}${furn}lock`, 'locked')
+        }
+    }
+
+    function lock(dragId){
+      $(`#${dragId}`).draggable({disabled: true})
+    }
+    function unlock(dragId){
+      $(`#${dragId}`).draggable({disabled: false})
+    }
+  </script>
+</body>
+
+</html>
