@@ -75,26 +75,17 @@
       </div>
 
     </div>
-    <button type="button" class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block" data-bs-toggle="modal"
-      data-bs-target="#signUp">
-      Sign Up
+    <button type="button" class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block">
+      <a href="{%url 'signup' %}" class="li-modal">Sign Up</a>
     </button>
-    <div class="modal fade" id="signUp" tabindex="-1" aria-labelledby="signUpLabel" aria-hidden="true">
+    <div class="modal fade" id="theModal" tabindex="-1" aria-labelledby="signUpLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="signUpLabel">Sign Up</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            {% if error_message %}<p class="red-text">{{ error_message }}</p>{% endif %}
           </div>
           <div class="modal-footer">
-            <form action="" method="POST" action="{% url 'signup' %}">
-              {% csrf_token %}
-              {{ form.as_p }}
-              <input type="submit" value="Signup" class="btn">
-            </form>
           </div>
         </div>
       </div>
@@ -103,7 +94,7 @@
     <footer>copyright 2021: M O O V &copy </footer>
   </div>
   <script>
-    $('.li-modal').on('click', function(e){
+    $('.li-modal').on('click', function (e) {
       e.preventDefault();
       $('#theModal').modal('show').find('.modal-content').load($(this).attr('href'));
     });
