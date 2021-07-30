@@ -1,20 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moov Logout</title>
-</head>
-<body>
+<div class="modal-header">
+    <h5 class="modal-title" id="signUpLabel">Sign Up</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
     <h1>Signup</h1>
 
     {% if error_message %}<p class="red-text">{{ error_message }}</p>{% endif %}
 
-    <form action="" method="POST" action="{% url 'signup' %}">
+    <form method="POST" action="{% url 'signup' %}">
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Signup" class="btn">
     </form>
-</body>
-</html>
+</div>
+<div class="modal-footer">
+</div>
