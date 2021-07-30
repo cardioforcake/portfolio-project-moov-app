@@ -1,11 +1,32 @@
-{% extends 'base.html' %}
 {% load static %}
-
-{% block content%}
+<!-- 
+ block content
 <div class="title border border-dark w-100 text-center">
 <h1>FloorPlans List</h1>
 </div>
-{% for fp in floorplans %}
+ for fp in floorplans 
+<div class= "floorplan-cards">
+<div class="card col">
+    <a href=" url 'floorplan_details' fp.id ">
+        <div class="card-content">
+            <img class="d-block mx-auto w-25" src=" static "moov_app/media/SampleFloorplan.png" " alt="Floorplan Image" />
+            <span class="card-title">fp.length</span>
+            <p>fp.name</p>
+        </div>
+    </a>
+</div>
+ endfor 
+</div>
+<a href=" url 'floorplan_create'  " ><button  class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block ">Add Floorplan</button></a>
+
+ endblock  -->
+
+<div class="modal-header">
+    <h5 class="modal-title" id="floorPlanLabel">floorPlan Index</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    {% for fp in floorplans %}
 <div class= "floorplan-cards">
 <div class="card col">
     <a href="{% url 'floorplan_details' fp.id %}">
@@ -18,6 +39,5 @@
 </div>
 {% endfor %}
 </div>
-<a href="{% url 'floorplan_create'  %}" ><button  class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block ">Add Floorplan</button></a>
-
-{% endblock %}
+<div class="modal-footer">
+</div>
