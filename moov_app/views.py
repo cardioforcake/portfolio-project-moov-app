@@ -86,7 +86,7 @@ def greeting(request):
 
 @login_required
 def home(request):
-    if CurrentFloorPlan.objects.filter(user=request.user) != 0:
+    if len(CurrentFloorPlan.objects.filter(user=request.user)) != 0:
       currentFP = CurrentFloorPlan.objects.get(user=request.user).currentfloorplan
     else:
       currentFP = {}
