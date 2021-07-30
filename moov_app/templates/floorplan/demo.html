@@ -27,6 +27,12 @@
       }
       .furniture{
           border-radius: 0.1em;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 2vw;
+          font-weight: 800;
+          color: white;
       }
       #fp-container{
         position: absolute;
@@ -42,10 +48,10 @@
       }
       #screen{
         width: 100vw;
-        height: 100vh;
+        height: 100%;
         display: flex;
         justify-content: center;
-        margin-top: 3vh
+        margin-top: 1vh;
       }
       footer{
         position: absolute;
@@ -53,22 +59,56 @@
         width: 100vw;
       }
       .footer{
+        z-index: 2;
         margin:auto;
-        /* border-radius: 1rem !important; */
       }
       .bar{
         display: flex;
         flex-direction: row;
+        justify-content: space-between;
+        background-color: black;
+      }
+      .bar>a{
+        display: flex;
+        justify-content: center;
+        max-width: 25%;
+        font-weight: 500;
+        font-size: 1.5rem;
       }
       .trigger{
         margin: auto;
       }
       .trigger-container{
+        height: 12vh;
         display: flex;
         justify-content: center;
+
       }
       .trigger-btn{
+        height: 100%;
         background-color: black;
+      }
+
+      #help-content{
+        height: 65vh;
+      }
+
+      #furniture-content{
+        height: 70vh;
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        overflow-y: scroll;
+        width: 35vw;
+      }
+      .furn{
+        width: 10vw;
+        height: 10vw;
+        margin: 2vw 2vw 2vw 2vw;
+      }
+
+      .modal, .modal-content{
+        margin: 0 auto;
       }
     </style>
 
@@ -105,6 +145,28 @@
       </div>
     </div>
 
+    <div class="modal fade" id="help-modal" tabindex="-1" aria-labelledby="helpLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content" id="help-content">
+            This is the help page!
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="furniture-modal" tabindex="-1" aria-labelledby="helpLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content" id="furniture-content">
+            {% for furn in allFurnitures %}
+              <button class="furn" style="background-color: {{furn.color}};">
+                {{furn.type}}
+                {{furn.length}}
+                {{furn.width}}
+              </button>
+            {% endfor %}
+        </div>
+      </div>
+    </div>
+
     <div>
         {% for furn in furnitures %}
             <!-- <div class="card">
@@ -119,20 +181,20 @@
   </div>
   <footer>
     <div class="footer">
-      <div class="pos-f-t">
+      <!-- <div class="pos-f-t"> -->
         <div class="collapse" id="navbarToggleExternalContent">
-          <div class="bg-dark p-4 bar">
-                  <a class="dropdown-item text-white" href="#">Database</a>
-                  <a class="dropdown-item text-white" href="#">Server Side</a>
-                  <a class="dropdown-item text-white" href="#">Client Side</a>
+          <div class="p-4 bar">
+                  <a class="dropdown-item text-white btn btn-primary furniture-modal" href="#">Furniture</a>
+                  <a class="dropdown-item text-white btn btn-primary" href="{% url 'home' %}">Home</a>
+                  <a class="dropdown-item text-white btn btn-primary help-modal" href="#">Help</a>
           </div>
         </div>
-      </div>
+      <!-- </div> -->
       <nav class="navbar navbar-dark trigger-container">
           <!-- <div class="container-fluid"> -->
               <button class="navbar-toggler trigger-btn" type="button" data-bs-toggle="collapse"
                   data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
-                  aria-expanded="false" aria-label="Toggle navigation" >
+                   >
                   <span class="navbar-toggler-icon trigger"></span>
               </button>
           <!-- </div> -->
@@ -158,10 +220,12 @@
         scrnW = window.innerWidth
         scrnH = window.innerHeight
         if((scrnW/scrnH) > (Number(fpW)/Number(fpH))){
-          $('#floorplan').css({'height' : '90vh', 'width': `${Number(fpW)/Number(fpH)*90}vh`})
-        }else(
-          $('#floorplan').css({'width' : '90vw', 'height': `${Number(fpH)/Number(fpW)*90}vw`})
-        )
+          $('#floorplan').css({'height' : '88vh', 'width': `${Number(fpW)/Number(fpH)*88}vh`})
+          $('.trigger-btn').css('width', `${Number(fpW)/Number(fpH)*88}vh`)
+        }else{
+          $('#floorplan').css({'width' : '88vw', 'height': `${Number(fpH)/Number(fpW)*88}vw`})
+          $('.trigger-btn').css('width', '88vw')
+        }
       }
 
       function placeFurniture(furnId){
@@ -172,8 +236,6 @@
           }
         })
       }
-
-      
 
       resizeFloorPlan()
 
@@ -224,6 +286,16 @@
 
       placeFurniture(furnIds)
 
+      $('.help-modal').on('click', function (e) {
+          e.preventDefault();
+          $('#help-modal').modal('show');
+      });
+
+      $('.furniture-modal').on('click', function (e) {
+          e.preventDefault();
+          $('#furniture-modal').modal('show');
+      });
+
       function toggleLock(furn){
         if($(`#${furn}`).hasClass('ui-draggable-disabled')){
             unlock(furn)
@@ -233,8 +305,6 @@
             localStorage.setItem(`p{{floorplan.id}}${furn}lock`, 'locked')
           }
       }
-
-
 
       function lock(dragId){
         $(`#${dragId}`).draggable({disabled: true})

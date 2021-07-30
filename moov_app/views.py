@@ -32,10 +32,11 @@ def floorplan_demo(request):
     floorplan = FloorPlan.objects.get(id=3)
     furns = floorplan.furnitures.all()
     linkedFurniture = LinkedFurniture.objects.filter(floorplan=3)
+    allFurnitures = Furniture.objects.all()
     for furn in furns:
       furn_type = furn.type[0:2].capitalize()
       furnitures.append({'id': furn.id, 'type': furn_type, 'width': furn.width, 'length':furn.length, 'color':furn.color, 'rotated':linkedFurniture.get(furniture=furn.id).rotated})
-    return render(request, 'floorplan/demo.html', {'furnitures': furnitures, 'floorplan': floorplan})
+    return render(request, 'floorplan/demo.html', {'furnitures': furnitures, 'floorplan': floorplan, 'allFurnitures': allFurnitures})
 
 
 def demo_nav(request):
