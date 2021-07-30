@@ -25,8 +25,8 @@ class Furniture(models.Model):
     length = models.FloatField()
     width = models.FloatField()
     color = models.CharField(max_length=10,
-    choices=COLORS,
-    default=COLORS[0][0])
+        choices=COLORS,
+        default=COLORS[0][0])
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
