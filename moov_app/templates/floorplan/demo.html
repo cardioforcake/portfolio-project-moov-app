@@ -45,14 +45,30 @@
         height: 100vh;
         display: flex;
         justify-content: center;
-        align-items: center;
+        margin-top: 3vh
       }
       footer{
         position: absolute;
         bottom: 0;
         width: 100vw;
+      }
+      .footer{
+        margin:auto;
+        /* border-radius: 1rem !important; */
+      }
+      .bar{
+        display: flex;
+        flex-direction: row;
+      }
+      .trigger{
+        margin: auto;
+      }
+      .trigger-container{
         display: flex;
         justify-content: center;
+      }
+      .trigger-btn{
+        background-color: black;
       }
     </style>
 
@@ -102,24 +118,26 @@
 
   </div>
   <footer>
-    <div class="collapse" id="navbarToggleExternalContent">
-      <div class="bg-dark p-4">
-          <h5 class="text-white h4">Collapsed content</h5>
-          <span class="text-muted">TEST !@#$</span>
-              <a class="dropdown-item col" href="#">Database</a>
-              <a class="dropdown-item col" href="#">Server Side</a>
-              <a class="dropdown-item col" href="#">Client Side</a>
+    <div class="footer">
+      <div class="pos-f-t">
+        <div class="collapse" id="navbarToggleExternalContent">
+          <div class="bg-dark p-4 bar">
+                  <a class="dropdown-item text-white" href="#">Database</a>
+                  <a class="dropdown-item text-white" href="#">Server Side</a>
+                  <a class="dropdown-item text-white" href="#">Client Side</a>
+          </div>
+        </div>
       </div>
-  </div>
-  <nav class="navbar navbar-dark bg-dark">
-      <div class="container-fluid">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-              data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
-              aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-          </button>
-      </div>
-  </nav>
+      <nav class="navbar navbar-dark trigger-container">
+          <!-- <div class="container-fluid"> -->
+              <button class="navbar-toggler trigger-btn" type="button" data-bs-toggle="collapse"
+                  data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
+                  aria-expanded="false" aria-label="Toggle navigation" >
+                  <span class="navbar-toggler-icon trigger"></span>
+              </button>
+          <!-- </div> -->
+      </nav>
+    </div>
   </footer>
 
 
