@@ -11,6 +11,8 @@
     <a href="{% url 'floorplan_index' %}" ><button  class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block ">Change Floorplan</button></a>
 {% else %}
 {% for fp in currentFP.photo_set.all %}
+
+<div class="flex">
   <div class="home-buttons">
     <div class="card" style="width: 18rem;">
       <img class="card-img-top" src="{{ fp.url }}" alt="Card image cap">
@@ -27,5 +29,7 @@
     <a href="{% url 'floorplan_index' %}" ><button  class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block ">Change Floorplan</button></a>
     <a href="{% url 'furniture_create' %}" ><button  class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block ">Add Furniture</button></a>
     </div>
+
+  </div>
   {% endif %}
 {% endblock %}
