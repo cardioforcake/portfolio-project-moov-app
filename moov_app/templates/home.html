@@ -6,16 +6,16 @@
 <!-- <div style="font-size:55px">  What to do Now :thinking_face: </div> -->
 {% if currentFP == 0 %}
     <!-- <p>empty</p> -->
-    <a href="{% url 'floorplan_create'  %}" ><button  class="btn btn-lg mb-2 mb-md-0  btn-block "></button> <div class="circle">
+    <a href="{% url 'floorplan_create'  %}" ><button  class="btn btn-lg mb-2 mb-md-0  btn-block home-elements"></button> <div class="circle">
     </div></a>
-    <button style="color:white" type="button" class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block">
-      <a href="{% url 'floorplan_index' %}" class="li-modal">Change Floorplans</a>
+    <button style="color:white" type="button" class="btn btn-lg mb-2 mb-md-0 btn-primary btn-block home-elements">
+      <a href="{% url 'floorplan_index' %}" class="li-modal" style="color: white; text-decoration: none;">Change Floorplans</a>
     </button>
-    <div class="create_furniture">
+    <div class="create_furniture home-elements" >
       <a href="{% url 'furniture_create' %}" >       
         <button type="button" style="margin-right: 30px;" class="btn btn-primary">Add Furniture</button>
      </a>
-      </div>
+    </div>
     <div class="modal fade" id="theModal" tabindex="-1" aria-labelledby="floorPlanLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">

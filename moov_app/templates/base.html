@@ -18,6 +18,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@1,300&display=swap" rel="stylesheet">
     <title>Moov</title>
+    <style>
+        main{
+            display: flex;
+            flex: 1;
+            flex-direction: column;
+            /* justify-content: space-evenly; */
+            align-items: center;
+            font-family: 'Archivo', sans-serif;
+        }
+        .home-elements{
+            margin-top: 5vh;
+        }
+    </style>
 </head>
 <body class="background">
     <div class=" container border border-dark border-5 w-100">
@@ -26,7 +39,7 @@
                 
             </nav>
         </header>
-        <main class="">
+        <main>
             {% block content %}
             {% endblock %}
         </main>
