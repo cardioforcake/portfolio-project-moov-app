@@ -121,6 +121,8 @@
   <div id='screen'>
       <div id="floorplan">
         <div id="fp-container">
+          {% block content %}
+          {% endblock %}
         {% for furn in furnitures %}
               {% if furn.rotated == 1 %}
                 <div id="f{{furn.id}}" class="furniture ui-widget-content" style="width: {{furn.length | scale_furniture:floorplan.length}}; height: {{furn.width | scale_furniture:floorplan.width}}; background-color: {{furn.color}}; opacity: 0.75;">
@@ -157,14 +159,6 @@
       {% endfor %}
     </div>
 
-    <div class="modal fade" id="help-modal" tabindex="-1" aria-labelledby="helpLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content" id="help-content">
-            This is the help page!
-        </div>
-      </div>
-    </div>
-
     <div class="modal fade" id="furniture-modal" tabindex="-1" aria-labelledby="helpLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content" id="furniture-content">
@@ -175,6 +169,20 @@
                 {{furn.width}}
               </button>
             {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="floorplan-modal" tabindex="-1" aria-labelledby="helpLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content" id="help-content">
+            <a href="{% url 'floorplan_update' floorplan.id %}">
+              <button>Update Floorplan</button>
+            </a>
+            <a href="{% url 'floorplan_delete' floorplan.id %}">
+              <button>Delete Floorplan</button>
+            </a>
+
         </div>
       </div>
     </div>
@@ -190,8 +198,15 @@
           
             <input type="submit" value="upload floorplan" class="btn">
           
-          </form>
-          
+          </form>         
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="help-modal" tabindex="-1" aria-labelledby="helpLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content" id="help-content">
+            This is the help page!
         </div>
       </div>
     </div>
@@ -200,20 +215,18 @@
 
 
 
-
-
-
   </div>
+
   <footer>
     <div class="footer">
       <!-- <div class="pos-f-t"> -->
         <div class="collapse" id="navbarToggleExternalContent">
           <div class="p-4 bar">
-                  <a class="dropdown-item text-white btn btn-primary furniture-modal" href="#">Furniture</a>
-                  <a class="dropdown-item text-white btn btn-primary" href="{% url 'home' %}">Home</a>
-                  <a class="dropdown-item text-white btn btn-primary help-modal" href="#">Help</a>
-                  <a class="dropdown-item text-white btn btn-primary add-photo-modal" href="{% url 'add_photo' currentFP.id %}">Add Photo</a>
-
+              <a class="dropdown-item text-white btn btn-primary" href="{% url 'home' %}">Home</a>
+              <a class="dropdown-item text-white btn btn-primary furniture-modal" href="#">Furniture</a>
+              <a class="dropdown-item text-white btn btn-primary floorplan-modal" href="#">Floorplan</a>
+              <a class="dropdown-item text-white btn btn-primary add-photo-modal" href="#">Blueprint</a>
+              <a class="dropdown-item text-white btn btn-primary help-modal" href="#">Help</a>
           </div>
         </div>
       <!-- </div> -->
@@ -341,14 +354,24 @@
 
     placeFurniture(furnIds)
 
-    $('.help-modal').on('click', function (e) {
+    $('.help-modal').on('click', function(e){
         e.preventDefault();
         $('#help-modal').modal('show');
     });
 
-    $('.furniture-modal').on('click', function (e) {
+    $('.furniture-modal').on('click', function(e){
         e.preventDefault();
         $('#furniture-modal').modal('show');
+    });
+
+    $('.add-photo-modal').on('click', function(e){
+        e.preventDefault();
+        $('#add-photo-modal').modal('show');
+    });
+
+    $('.floorplan-modal').on('click', function(e){
+        e.preventDefault();
+        $('#floorplan-modal').modal('show');
     });
 
     function toggleLock(furn){

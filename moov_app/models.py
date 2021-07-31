@@ -45,7 +45,7 @@ class FloorPlan(models.Model):
     def __str__(self):
         return self.comment
     def get_absolute_url(self):
-        return reverse('floorplan_index')
+        return reverse('floorplan_details', kwargs={'floorplan_id': self.id})
 
 class LinkedFurniture(models.Model):
     furniture = models.ForeignKey(Furniture, on_delete=models.CASCADE)
