@@ -4,11 +4,11 @@ from django.urls import reverse
 # Create your models here.
 
 COLORS=(
-    ('Grey', 'Grey'),
+    ('Yellow', 'Yellow'),
     ('Brown', 'Brown'),
     ('Red', 'Red'),
     ('Orange', 'Orange'),
-    ('Beige', 'Beige'),
+    ('Black', 'Black'),
 )
 
 FURNITURES=(
