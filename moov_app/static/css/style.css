@@ -17,8 +17,10 @@
 }
 
 body{
-    background-color: #5E96AE !important;
-    background-image: -webkit-linear-gradient(25deg, #5E96AE 45%, #8fb2c2 45%);
+    background-color: #808080 !important;
+    /* background-image: -webkit-linear-gradient(15deg, #EC6A5C 15%,  #13515D 23%, ); */
+    background-image: linear-gradient(grey);
+    
     min-height: 400px;
 }
 
@@ -41,7 +43,12 @@ main {
 
 .home-buttons{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    /* justify-content: space-between;  */
+    align-items:center;
+}
+.card{
+    margin:15px
 }
 
 .btn {
@@ -95,7 +102,17 @@ footer {
   }
   
 
-  .flex{
-      display:flex;
-      flex-direction: column;
+  
+ .home-buttons{
+    /* display:flex;
+    flex-direction: row;
+    justify-content: space-between; */
+
+  
+
+  }
+
+
+  .create_furniture{
+      margin-left: 25px
   }
