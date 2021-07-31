@@ -36,11 +36,7 @@ ERD
 ​
 ## Future Enhancements
 ​
-- randomizing tarot cards
-- add images to website
-- implement a calendar system that allows sorting of readings into seperate days
-Collapse
-
+- Implementing a cropping feature
 
 
 
