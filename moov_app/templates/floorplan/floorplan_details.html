@@ -420,7 +420,7 @@
 
     allFurnIds.forEach((furn)=>{
       if(furnIds.includes(furn)){
-        $(`#incld${furn}`).css({'border-width':'0.5vw', 'border-color': 'yellow'})
+        $(`#incld${furn}`).css({'border-width':'0.5vw', 'border-color': 'dark'})
         $(`#incld${furn}`).mousedown(()=>{
           timeOut = setTimeout(()=>{
                                   window.location.href=`../floorplans/{{floorplan.id}}/unassoc_furniture/${furn.slice(1)}/`
