@@ -44,23 +44,24 @@ def floorplan_details(request, floorplan_id):
     linkedFurniture = LinkedFurniture.objects.filter(floorplan=floorplan_id)
     allFurnitures = Furniture.objects.all()
     for furn in furns:
-      furn_type = furn.type[0:2].capitalize()
+      furn_type = furn.type[0:3].capitalize()
       furnitures.append({'id': furn.id, 'type': furn_type, 'width': furn.width, 'length':furn.length, 'color':furn.color, 'rotated':linkedFurniture.get(furniture=furn.id).rotated})
     return render(request, 'floorplan/floorplan_details.html', {'furnitures': furnitures, 'floorplan': floorplan, 'allFurnitures': allFurnitures, 'currentFP': currentFP})
 
+@login_required
 def floorplan_details_bg(request, floorplan_id):
     floorplan = FloorPlan.objects.get(id=floorplan_id)
     return render(request, 'floorplan/floorplan_details_bg.html', {'floorplan': floorplan})
 
-
-def demo_nav(request):
-    furnitures2 = []
-    floorplan2 = FloorPlan.objects.get(id=3)
-    furns2 = floorplan2.furnitures.all()
-    linkedFurniture = LinkedFurniture.objects.filter(floorplan=3)
-    for furn in furns2:
-      furnitures2.append({'id': furn.id, 'type': furn.type, 'width': furn.width, 'length':furn.length, 'color':furn.color, 'rotated':linkedFurniture.get(furniture=furn.id).rotated})
-    return render(request, 'floorplan/demo-nav.html', {'furnitures': furnitures2, 'floorplan': floorplan2})
+# @login_required
+# def demo_nav(request):
+#     furnitures2 = []
+#     floorplan2 = FloorPlan.objects.get(id=3)
+#     furns2 = floorplan2.furnitures.all()
+#     linkedFurniture = LinkedFurniture.objects.filter(floorplan=3)
+#     for furn in furns2:
+#       furnitures2.append({'id': furn.id, 'type': furn.type, 'width': furn.width, 'length':furn.length, 'color':furn.color, 'rotated':linkedFurniture.get(furniture=furn.id).rotated})
+#     return render(request, 'floorplan/demo-nav.html', {'furnitures': furnitures2, 'floorplan': floorplan2})
 
 
 def signup(request):
@@ -132,18 +133,22 @@ def floorplan_details2(request, floorplan_id):
     'currentFP': currentFP,
   })
 
+@login_required
 def assoc_furniture(request, floorplan_id, furniture_id):
   FloorPlan.objects.get(id=floorplan_id).furnitures.add(furniture_id)
   return redirect('floorplan_details', floorplan_id=floorplan_id)
 
+@login_required
 def unassoc_furniture(request, floorplan_id, furniture_id):
   FloorPlan.objects.get(id=floorplan_id).furnitures.remove(furniture_id)
   return redirect('floorplan_details', floorplan_id=floorplan_id)
-  
+
+@login_required 
 def remove_furniture(request, floorplan_id, furniture_id):
   FloorPlan.objects.get(id=floorplan_id).furnitures.remove(Furniture.objects.get(id=furniture_id))
   return redirect('floorplan_details', floorplan_id=floorplan_id)
-  
+
+@login_required
 def rotate_furniture(request, floorplan_id, furniture_id):
   linked = LinkedFurniture.objects.filter(floorplan=floorplan_id).get(furniture=furniture_id)
   linked.rotated *= -1
@@ -175,7 +180,7 @@ class FloorplanDelete(LoginRequiredMixin,DeleteView):
     model = FloorPlan
     success_url = '/home/'
 
-
+@login_required
 def add_photo(request, floorplan_id):
   photo_file = request.FILES.get('photo-file', None)
   if photo_file:
