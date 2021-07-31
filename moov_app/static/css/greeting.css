@@ -1,4 +1,4 @@
-.carousel { z-index: -99;}
+/* .carousel { z-index: -99;}
 .carousel-item {
     margin: auto;
 }
@@ -27,20 +27,17 @@
 .carousel-fade .active.carousel-item-prev {
 	transform: translateX(0);
 	transform: translate3d(0, 0, 0);
-}
+} */
 
-.container{
+/* .container{
     display: flex;
     flex-direction: column;
 	align-items: center;
     justify-content: center;
     min-height: 100vh;
-}
+} */
 
-body{
-    background-color: #5E96AE !important;
-    background-image: -webkit-linear-gradient(25deg, #5E96AE 45%, #8fb2c2 45%);
-}
+
 
 .btn{
     font-family: 'Archivo', sans-serif;

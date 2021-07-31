@@ -16,22 +16,108 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@1,300&display=swap" rel="stylesheet">
+
+  <style>
+
+      .container{
+        border: solid;
+        background-size:auto;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        margin-top: 1vh;
+      }
+      footer{
+        position: absolute;
+        bottom: 0;
+        width: 100vw;
+      }
+      
+      .footer{
+        z-index: 2;
+        margin:auto;
+      }
+
+      .bar{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        background-color: black;
+      }
+      .bar>a{
+        display: flex;
+        justify-content: center;
+        max-width: 25%;
+        font-weight: 500;
+        font-size: 1.5rem;
+      }
+      .trigger{
+        margin: auto;
+      }
+      .trigger-container{
+        height: 12vh;
+        display: flex;
+        justify-content: center;
+      }
+      .trigger-btn{
+        height: 100%;
+        background-color: black;
+      }
+
+      .btn{
+    font-family: 'Archivo', sans-serif;
+    margin: 5px;
+      }
+
+    .image {
+      position: absolute;
+      top: 30%;
+      left: 45%;
+      width: 300px;
+      height: 300px;
+      margin: -60px 0 0 -60px;
+      -webkit-animation: spin 4s linear infinite;
+      -moz-animation: spin 4s linear infinite;
+      animation: spin 7s linear infinite;
+    }
+
+    @-moz-keyframes spin {
+      100% {
+        -moz-transform: rotate(360deg);
+      }
+    }
+
+    @-webkit-keyframes spin {
+      100% {
+        -webkit-transform: rotate(360deg);
+      }
+    }
+
+    @keyframes spin {
+      100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+      }
+    }
+  </style>
   <title>Moov</title>
 </head>
 
-<body class=" border border-dark border-5  text-center">
+<body class="container">
+  <img class=" image " src=" static/moov_app/media/moovlogo.png" alt="MOOV-logo" width="120" height="120" />
+  <!-- <body class=" border border-dark border-5  text-center">
   <div class="row container">
     <div class="carousel slide carousel-fade d-none d-sm-none d-md-none d-lg-block d-xl-block" data-bs-ride="carousel"
       data-bs-interval="3000">
       <div class="carousel-inner">
         <div class="carousel-item active">
-          <img class="d-block mx-auto" src="{% static "moov_app/media/carousel1.jpg" %}" alt="logo1" />
+          <img class="d-block mx-auto" src=" static "moov_app/media/carousel1.jpg" " alt="logo1" />
         </div>
         <div class="carousel-item">
-          <img class="d-block mx-auto" src="{% static "moov_app/media/carousel2.jpg" %}" alt="logo2" />
+          <img class="d-block mx-auto" src=" static "moov_app/media/carousel2.jpg" " alt="logo2" />
         </div>
         <div class="carousel-item">
-          <img class="d-block mx-auto" src="{% static "moov_app/media/carousel3.jpg" %}" alt="logo3" />
+          <img class="d-block mx-auto" src=" static "moov_app/media/carousel3.jpg" " alt="logo3" />
         </div>
       </div>
     </div>
@@ -40,65 +126,82 @@
       data-bs-interval="3000">
       <div class="carousel-inner">
         <div class="carousel-item active">
-          <img class="d-block mx-auto" src="{% static "moov_app/media/carousel1sm.jpg" %}" alt="logo1" />
+          <img class="d-block mx-auto" src=" static "moov_app/media/carousel1sm.jpg" " alt="logo1" />
         </div>
         <div class="carousel-item">
-          <img class="d-block mx-auto" src="{% static "moov_app/media/carousel2sm.jpg" %}" alt="logo2" />
+          <img class="d-block mx-auto" src=" static "moov_app/media/carousel2sm.jpg" " alt="logo2" />
         </div>
         <div class="carousel-item">
-          <img class="d-block mx-auto" src="{% static "moov_app/media/carousel3sm.jpg" %}" alt="logo3" />
+          <img class="d-block mx-auto" src=" static "moov_app/media/carousel3sm.jpg" " alt="logo3" />
+        </div>
+      </div>
+    </div> -->
+
+  <!-- <button class=" btn btn-dark"><a class=" text-white " href="{% url 'home' %}">Enter</a></button>
+  <button class=" btn btn-dark"><a class=" text-white " href="{% url 'logout' %}">Log Out</a></button> -->
+  <!-- <button type="button" class=" login-button btn btn-lg mb-2 mb-md-0 btn-secondary btn-block"><a href="{%url 'login' %}"
+      class="text-white li-modal">Login</a></button> -->
+  <div class="modal fade" id="theModal" tabindex="-1" aria-labelledby="loginLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+        </div>
+        <div class="modal-body">
         </div>
       </div>
     </div>
-
-
-    <button class="btn mb-md-0 btn-secondary btn-block "><a
-        class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block w-100" href="{% url 'signup' %}">TEMP Signup</a></button>
-    <button class="btn mb-md-0 btn-secondary btn-block "><a
-        class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block w-100" href="{% url 'home' %}">Enter</a></button>
-    {% if user.is_authenticated %}
-    <button class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block"><a
-        class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block w-100" href="{% url 'logout' %}">Log Out</a></button>
-    {% else %}
-    <button type="button" class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block"><a href="{%url 'login' %}"
-        class="li-modal">Login</a>
-
-    </button>
-    <div class="modal fade" id="theModal" tabindex="-1" aria-labelledby="loginLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-          </div>
-          <div class="modal-body">
-          </div>
-        </div>
-      </div>
-
-    </div>
-    <button type="button" class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block">
-      <a href="{%url 'signup' %}" class="li-modal">Sign Up</a>
-    </button>
-    <div class="modal fade" id="theModal" tabindex="-1" aria-labelledby="signUpLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-          </div>
-          <div class="modal-body">
-          </div>
-          <div class="modal-footer">
-          </div>
-        </div>
-      </div>
-    </div>
-    {% endif %}
-    <footer>copyright 2021: M O O V &copy </footer>
   </div>
-  <script>
-    $('.li-modal').on('click', function (e) {
-      e.preventDefault();
-      $('#theModal').modal('show').find('.modal-content').load($(this).attr('href'));
-    });
-  </script>
+
+  <!-- <button type="signin-button" class="btn btn-dark"><a href="url 'signup' " class="text-white li-modal">Sign
+      Up</a></button> -->
+  <div class="modal fade" id="theModal" tabindex="-1" aria-labelledby="signUpLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<footer>
+  <div class="footer">
+    <!-- <div class="pos-f-t"> -->
+      <div class="collapse" id="navbarToggleExternalContent">
+        <div class="p-4 bar">
+                <a class="dropdown-item text-white btn btn-primary" href="{% url 'home' %}">Enter</a>
+                {% if user.is_authenticated %}
+                <a class=" dropdown-item text-white btn btn-primary " href="{% url 'logout' %}">Log Out</a>
+                {% else %}
+                <a href="{%url 'login' %}" class="dropdown-item text-white btn btn-primary li-modal">Login</a>
+                <a href="{%url 'signup' %}" class="dropdown-item text-white btn btn-primary li-modal">Sign Up</a>
+                {% endif %}
+
+        </div>
+      </div>
+    <!-- </div> -->
+    <nav class="navbar navbar-dark trigger-container">
+        <!-- <div class="container-fluid"> -->
+            <button class="navbar-toggler trigger-btn" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
+                 >
+                <span class="navbar-toggler-icon trigger"></span>
+            </button>
+        <!-- </div> -->
+    </nav>
+  </div>
+  <!-- <p>copyright 2021: M O O V &copy</p> -->
+</footer>
+</div>
+<script>
+  $('.li-modal').on('click', function (e) {
+    e.preventDefault(); 
+    $('#theModal').modal('show').find('.modal-content').load($(this).attr('href'));
+});
+</script>
 </body>
 
 </html>
