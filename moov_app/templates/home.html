@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="title border border-dark w-100 text-center">
-  <h1>Home</h1>
-  <h3>floorplan id:{{ currentFP.id }}</h3> 
+  <h1 style="font-weight: bold;">Moov</h1>
 </div>
 <!-- <div style="font-size:55px">  What to do Now :thinking_face: </div> -->
 {% if currentFP == 0 %}
@@ -42,7 +41,7 @@
     <div>
       <a href="{% url 'floorplan_index' %}" class="li-modal">
         
-        <button type="button" class="btn btn-primary">Change Floorplan</button>
+        <button type="button" class="btn btn-primary">Select Floorplan</button>
   
       </a>
       </div>
