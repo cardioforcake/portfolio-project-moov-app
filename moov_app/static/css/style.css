@@ -2,66 +2,59 @@
     box-sizing: border-box;
     margin: 0;
 }
-
 .floorplan-demo {
     width: 20rem;
     height: 20rem;
     border: solid;
 }
-
 .container{
     display: flex;
     flex-direction: column;
     justify-content: center;
     min-height: 100vh;
 }
-
 body{
-    background-color: #5E96AE !important;
-    background-image: -webkit-linear-gradient(25deg, #5E96AE 45%, #8fb2c2 45%);
+    background-color: #B1B1B1  !important;
+    /* background-image: -webkit-linear-gradient(15deg, #EC6A5C 15%,  #13515D 23%, ); */
+    background-image: linear-gradient(grey);
+    
     min-height: 400px;
 }
-
 .navbar {
     align-self: flex-start;
     left: 0;
     top: 0;
-
 }
-
 main {
     display: flex;
     flex: 1;
     flex-direction: column;
     align-items: center;
     font-family: 'Archivo', sans-serif;
-
-
 }
-
 .home-buttons{
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    /* justify-content: space-between;  */
+    align-items:center;
 }
-
+.card{
+    margin:15px
+}
 .btn {
     font-family: 'Archivo', sans-serif;
     margin: 5px;
 }
-
 .floorplan-cards{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
-
 footer {
     display: flex;
     align-items: center;
     justify-content: center;
 }
-
-
 .circle {
     border-radius: 50%;
     width: 200px;
@@ -94,8 +87,43 @@ footer {
     z-index: 9;
   }
   
-
-  .flex{
-      display:flex;
-      flex-direction: column;
+  
+ .home-buttons{
+    /* display:flex;
+    flex-direction: row;
+    justify-content: space-between; */
+  
+  }
+  .create_furniture{
+      margin-left: 25px
+  }
+  
+  .footer{
+    z-index: 2;
+    margin:auto;
+  }
+  .bar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: black;
+  }
+  .bar>a{
+    display: flex;
+    justify-content: center;
+    max-width: 25%;
+    font-weight: 500;
+    font-size: 1.5rem;
+  }
+  .trigger{
+    margin: auto;
+  }
+  .trigger-container{
+    height: 12vh;
+    display: flex;
+    justify-content: center;
+  }
+  .trigger-btn{
+    height: 100%;
+    background-color: black;
   }
