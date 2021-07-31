@@ -91,9 +91,9 @@
         background-color: black;
       }
       #help-content{
-        height: 65vh;
+        height: 80vh;
       }
-      #furniture-content{
+      #furniture-content{ 
         height: 70vh;
         display: flex;
         flex-wrap: wrap;
@@ -146,6 +146,46 @@
         text-transform: capitalize;
         font-weight: 500;
       }
+      .help-section{
+        width: 87%;
+        height: 40%;
+        background-color: rgb(255, 255, 255,0.7);
+        margin: 0 1vw 2vw 1vw;
+        border-radius: 0.3vw;
+        color: grey;
+        font-size: max(2.7vh, 95%);
+        padding: 1.5vh 2.5vh 1.5vh 2.5vh;
+      }
+      li{
+        margin-top: 2vh;
+      }
+      #add-photo-content{
+        height: 50vh;
+        background-color: #A5A5A5;
+      }
+      .add-photo-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        align-items: center;
+        height: 100%;
+ 
+      }
+      #img-upload{
+        margin: 0 auto;
+        align-items: center;
+        width: 70%;
+        display: inline-block;
+        font-size: max(2.7vh, 95%);
+      }
+      #bp-add{
+        background-color: black;
+        color: white;
+        padding: 2vh 2.5vw 2vh 2.5vw;
+        font-weight: 500;
+        font-size: max(2.7vh, 95%);
+        border-radius: 0.5vh;
+      }
     </style>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -188,9 +228,9 @@
 
       </div>
       {% for fp in currentFP.photo_set.all %}
-
-        <img class="card-img-top" src="{{ fp.url }}" alt="Card image cap">
-
+        <script>
+          $('#floorplan').css({'background-image': 'url("{{fp.url}}")','background-size':'100% 100%'})
+        </script>
       {% endfor %}
     </div>
 
@@ -228,13 +268,11 @@
     <div class="modal fade" id="add-photo-modal" tabindex="-1" aria-labelledby="addPhotoLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content" id="add-photo-content">
-          <form class="card-panel" action="{% url 'add_photo' floorplan.id %}" method="POST" enctype="multipart/form-data">
+          <form class="card-panel add-photo-container" action="{% url 'add_photo' floorplan.id %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            <input type="file" name="photo-file">
-            <br>
-            <br>
+            <input type="file" name="photo-file" id="img-upload">
           
-            <input type="submit" value="upload floorplan" class="btn">
+            <button type="submit" id="bp-add">Upload Floorplan</button>
           
           </form>         
         </div>
@@ -244,7 +282,19 @@
     <div class="modal fade" id="help-modal" tabindex="-1" aria-labelledby="helpLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content" id="help-content">
-            This is the help page!
+            <h1 style="color:rgb(255, 255, 255,0.7); margin-bottom: 1.5vw; margin-top: 1vw;">CONTROLS</h1>
+            <div class="help-section">
+              <ul>
+                <li>Furnitures can be dragged around within floorplan area</li>
+                <li>Select & hold a furniture in the furnitures tab to add or remove it from the floorplan</li>
+              </ul>
+            </div>
+            <div class="help-section">
+              <ul>
+                <li>Select & hold a furniture to lock or unlock it's position</li>
+                <li>Double click a furniture to rotate it 90 degrees</li>
+              </ul>
+            </div>
         </div>
       </div>
     </div>
@@ -261,7 +311,7 @@
         <div class="collapse" id="navbarToggleExternalContent">
           <div class="p-4 bar">
               <a class="dropdown-item text-white btn btn-primary" href="{% url 'home' %}">Home</a>
-              <a class="dropdown-item text-white btn btn-primary furniture-modal" href="#">Furniture</a>
+              <a class="dropdown-item text-white btn btn-primary furniture-modal" href="#">Furnitures</a>
               <a class="dropdown-item text-white btn btn-primary floorplan-modal" href="#">Floorplan</a>
               <a class="dropdown-item text-white btn btn-primary add-photo-modal" href="#">Blueprint</a>
               <a class="dropdown-item text-white btn btn-primary help-modal" href="#">Help</a>
@@ -362,7 +412,7 @@
         }
       })
       $(`#${furn}`).mousedown(()=>{
-        timeOut = setTimeout(()=>{toggleLock(furn)}, 700)
+        timeOut = setTimeout(()=>{toggleLock(furn)}, 600)
       }).bind('mouseup mouseleave mousemove', ()=>{
         clearTimeout(timeOut)
       })
@@ -374,7 +424,7 @@
         $(`#incld${furn}`).mousedown(()=>{
           timeOut = setTimeout(()=>{
                                   window.location.href=`../floorplans/{{floorplan.id}}/unassoc_furniture/${furn.slice(1)}/`
-                              }, 700)
+                              }, 500)
         }).bind('mouseup mouseleave mousemove', ()=>{
         clearTimeout(timeOut)
         })
@@ -383,7 +433,7 @@
         $(`#incld${furn}`).mousedown(()=>{
           timeOut = setTimeout(()=>{
                                   window.location.href=`../floorplans/{{floorplan.id}}/assoc_furniture/${furn.slice(1)}/`
-                              }, 700)
+                              }, 500)
         }).bind('mouseup mouseleave mousemove', ()=>{
         clearTimeout(timeOut)
         })
