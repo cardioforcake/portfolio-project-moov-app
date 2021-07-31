@@ -42,7 +42,7 @@ def floorplan_details(request, floorplan_id):
       currentFP = CurrentFloorPlan.objects.get(user=request.user).currentfloorplan
     furns = floorplan.furnitures.all()
     linkedFurniture = LinkedFurniture.objects.filter(floorplan=floorplan_id)
-    allFurnitures = Furniture.objects.all()
+    allFurnitures = Furniture.objects.filter(user=request.user)
     for furn in furns:
       furn_type = furn.type[0:3].capitalize()
       furnitures.append({'id': furn.id, 'type': furn_type, 'width': furn.width, 'length':furn.length, 'color':furn.color, 'rotated':linkedFurniture.get(furniture=furn.id).rotated})
@@ -102,7 +102,7 @@ def greeting(request):
 
 @login_required
 def home(request):
-    floorplans = FloorPlan.objects.all()
+    floorplans = FloorPlan.objects.filter(user=request.user)
 
     if len(CurrentFloorPlan.objects.filter(user=request.user)) != 0:
       currentFP = CurrentFloorPlan.objects.get(user=request.user).currentfloorplan
@@ -111,7 +111,7 @@ def home(request):
     return render(request, 'home.html', {'currentFP': currentFP, 'floorplans': floorplans})
 
 def floorplan_index(request):
-  floorplans = FloorPlan.objects.all()
+  floorplans = FloorPlan.objects.filter(user=request.user)
   return render(request, 'floorplan/floorplan_index.html', {'floorplans': floorplans})
 
 @login_required
