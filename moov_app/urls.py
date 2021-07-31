@@ -12,12 +12,15 @@ urlpatterns = [
 
     path("floorplans/create", views.FloorplanCreate.as_view(), name="floorplan_create"),
     path('floorplans/<int:floorplan_id>', views.floorplan_details, name="floorplan_details"),
+    path('floorplans2/<int:floorplan_id>', views.floorplan_details2, name="floorplan_details2"),
+
     path('floorplans/<int:pk>/update', views.FloorPlanUpdate.as_view(), name="floorplan_update"),
     path('floorplans/<int:pk>/delete', views.FloorplanDelete.as_view(), name="floorplan_delete"),
     path('floorplans/<int:floorplan_id>/assoc_furniture/<int:furniture_id>/', views.assoc_furniture, name='assoc_furniture'),
     path('floorplans/<int:floorplan_id>/unassoc_furniture/<int:furniture_id>/', views.unassoc_furniture, name='unassoc_furniture'),
-    # path('floorplans/<int:floorplan_id>/remove_furniture/<int:furniture_id>/', views.remove_furniture, name='remove_furniture'),
+    path('floorplans/<int:floorplan_id>/remove_furniture/<int:furniture_id>/', views.remove_furniture, name='remove_furniture'),
     path('floorplans/<int:floorplan_id>/furniture/<int:furniture_id>/rotate/', views.rotate_furniture, name='rotate'),
+
 
     path('furniture/create/', views.FurnitureCreate.as_view(), name="furniture_create"),
     path('furniture/<int:pk>/update/', views.FurnitureUpdate.as_view(), name='furniture_update'),
