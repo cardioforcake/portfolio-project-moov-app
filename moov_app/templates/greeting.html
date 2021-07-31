@@ -24,6 +24,7 @@
         justify-content: center;
         align-items: center;
         border:  black solid;
+        background-color: grey;
       }
 
       footer{
@@ -60,6 +61,7 @@
       }
       .trigger-btn{
         height: 100%;
+        width: 50vw;
         background-color: black;
       }
 
@@ -173,12 +175,12 @@
     <!-- <div class="pos-f-t"> -->
       <div class="collapse" id="navbarToggleExternalContent">
         <div class="p-4 bar">
-                <a class="dropdown-item text-white btn btn-primary" href="{% url 'home' %}">Enter</a>
+                <a class="dropdown-item text-white btn btn-primary" href="{% url 'home' %}" style="font-weight: bold;">Enter</a>
                 {% if user.is_authenticated %}
-                <a class=" dropdown-item text-white btn btn-primary " href="{% url 'logout' %}">Log Out</a>
+                <a class=" dropdown-item text-white btn btn-primary " href="{% url 'logout' %}" style="font-weight: bold;">Log Out</a>
                 {% else %}
-                <a href="{%url 'login' %}" class="dropdown-item text-white btn btn-primary li-modal">Login</a>
-                <a href="{%url 'signup' %}" class="dropdown-item text-white btn btn-primary li-modal">Sign Up</a>
+                <a href="{%url 'login' %}" class="dropdown-item text-white btn btn-primary li-modal" style="font-weight: bold;">Login</a>
+                <a href="{%url 'signup' %}" class="dropdown-item text-white btn btn-primary li-modal" style="font-weight: bold;">Sign Up</a>
                 {% endif %}
 
         </div>
