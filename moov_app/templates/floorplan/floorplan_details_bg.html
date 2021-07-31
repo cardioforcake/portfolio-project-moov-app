@@ -1,0 +1,149 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/demo.css' %}">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="{% static 'jquidragcollide/ui/jquery.ui.core.js' %}"></script>
+    <script src="{% static 'jquidragcollide/ui/jquery.ui.widget.js' %}"></script>
+    <script src="{% static 'jquidragcollide/ui/jquery.ui.mouse.js' %}"></script>
+    <script src="{% static 'jquidragcollide/ui/jquery.ui.draggable.js' %}"></script>
+    <script src="{% static 'jquidragcollide/jquery-collision.min.js' %}"></script>
+    <script src="{% static 'jquidragcollide/jquery-ui-draggable-collision.min.js' %}"></script>
+    <style>
+      #floorplan{
+        border: solid;
+        background-size:auto;
+        object-fit: scale-down;
+        position: relative;
+        margin-top: 1vh;
+        background-color: rgb(255, 255, 255,0.3);
+      }
+      #fp-container{
+        position: absolute;
+        top:0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      #screen{
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        background-color: grey;
+      }
+      footer{
+        position: absolute;
+        bottom: 0;
+        width: 100vw;
+      }
+      .footer{
+        z-index: 2;
+        margin:auto;
+      }
+      .trigger{
+        margin: auto;
+      }
+      .trigger-container{
+        height: 12vh;
+        display: flex;
+        justify-content: center;
+      }
+      .trigger-btn{
+        height: 100%;
+        background-color: black;
+      }
+      .trigger-btn-fake{
+        width: 50vw;
+        height: 100%;
+        background-color: black;
+      }
+    </style>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floorplan Details</title>
+</head>
+<body>
+    <div id='screen'>
+    {% if floorplan.id != None %}
+
+            <div id="floorplan">
+            <div id="fp-container">
+    {% else %}
+        <p>testing3</p>
+    {% endif %}
+
+    {% block content %}
+    {% endblock %}
+
+    {% if floorplan.id != None %}
+            </div>
+        </div>
+    {% endif %}
+
+
+  </div>
+
+  <footer>
+    {% if floorplan.id != None %}
+        <div class="footer">
+            <nav class="navbar navbar-dark trigger-container">
+                    <button class="navbar-toggler trigger-btn" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
+                        >
+                        <span class="navbar-toggler-icon trigger"></span>
+                    </button>
+            </nav>
+        </div>
+    {% else %}
+    <div class="footer">
+        <nav class="navbar navbar-dark trigger-container">
+                <button class="navbar-toggler trigger-btn-fake" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
+                    >
+                    <span class="navbar-toggler-icon trigger"></span>
+                </button>
+        </nav>
+    </div>
+    {% endif %}
+  </footer>
+
+  <script>
+    $('#fp-container').css({'background-size':'calc(100% / {{floorplan.length}}) calc(100% / {{floorplan.width}})','background-image':'linear-gradient(to right, rgb(200, 200, 200) 1px, transparent 1px),linear-gradient(to bottom, rgb(200, 200, 200) 1px, transparent 1px)', 'background-color':'transparent'})
+    
+    fpW = {{floorplan.length}}
+    fpH = {{floorplan.width}}
+
+    function resizeFloorPlan(){
+      scrnW = window.innerWidth
+      scrnH = window.innerHeight
+      if((scrnW/scrnH) > (Number(fpW)/Number(fpH))){
+        $('#floorplan').css({'height' : '88vh', 'width': `${Number(fpW)/Number(fpH)*88}vh`})
+        $('.trigger-btn').css('width', `${Number(fpW)/Number(fpH)*88}vh`)
+      }else{
+        $('#floorplan').css({'width' : '88vw', 'height': `${Number(fpH)/Number(fpW)*88}vw`})
+        $('.trigger-btn').css('width', '88vw')
+      }
+    }
+
+    resizeFloorPlan()
+
+    $(window).resize(()=>{
+      resizeFloorPlan()
+    })
+  </script>
+</body>
+
+</html>

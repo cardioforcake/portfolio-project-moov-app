@@ -48,6 +48,10 @@ def floorplan_details(request, floorplan_id):
       furnitures.append({'id': furn.id, 'type': furn_type, 'width': furn.width, 'length':furn.length, 'color':furn.color, 'rotated':linkedFurniture.get(furniture=furn.id).rotated})
     return render(request, 'floorplan/floorplan_details.html', {'furnitures': furnitures, 'floorplan': floorplan, 'allFurnitures': allFurnitures, 'currentFP': currentFP})
 
+def floorplan_details_bg(request, floorplan_id):
+    floorplan = FloorPlan.objects.get(id=floorplan_id)
+    return render(request, 'floorplan/floorplan_details_bg.html', {'floorplan': floorplan})
+
 
 def demo_nav(request):
     furnitures2 = []
@@ -155,19 +159,21 @@ class FloorplanCreate(LoginRequiredMixin,CreateView):
     def form_valid(self, form):
       form.instance.user = self.request.user
       return super().form_valid(form)
+    
+    def get_success_url(self):
+        return redirect('floorplan_details', kwargs={'floorplan_id': self.object.id})
 
 
   
 class FloorPlanUpdate(LoginRequiredMixin,UpdateView):
     model = FloorPlan
     fields = ['length', 'width', 'comment']
-    # success_url = '/floorplans/floorplan_detail'
 
 
 
 class FloorplanDelete(LoginRequiredMixin,DeleteView):
     model = FloorPlan
-    success_url = '/floorplans/'
+    success_url = '/home/'
 
 
 def add_photo(request, floorplan_id):

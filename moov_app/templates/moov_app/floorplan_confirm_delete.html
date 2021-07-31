@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'floorplan/floorplan_details_bg.html' %}
 
 {% block content%}
 <h1>Delete FloorPlan</h1>
@@ -7,7 +7,7 @@
 <form action="" method="POST">
     {%csrf_token%}
     <input type="submit" class="btn" value="Yes - Delete!">
-    <a href="{ url 'floorplan_index' object.id}"></a>
+    <a href="{ url 'floorplan_details' object.id}"></a>
 </form>
 
 {% endblock %}
