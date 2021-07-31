@@ -3,11 +3,13 @@
 {% block content %}
 
 
-<form action="" method="POST">
+<form action="" method="POST" id="floorplan-form">
     {% csrf_token %}
-    <table>
+    <table id="fp-table">
         {{ form.as_table }}
     </table>
-    <input class="btn" type="submit" value="Submit">
+    <div class="fp-form-submit-container">
+        <button class="fp-form-submit" type="submit">Submit</button>
+    </div>
 </form>
 {% endblock %}
