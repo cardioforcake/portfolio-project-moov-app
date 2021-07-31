@@ -1,5 +1,6 @@
 # CFC-Moov-App
 
+https://cfc-moov.herokuapp.com/
 
 #### Goal
 
@@ -34,10 +35,9 @@
 <img src="https://i.imgur.com/Lqi0l6k.png">
 
 
-#### Deployed Website (front-end)
+#### Deployed Website
 
 https://cfc-moov.herokuapp.com/
-
 
 #### Near Future updates
 
