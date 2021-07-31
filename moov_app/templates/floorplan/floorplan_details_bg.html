@@ -37,6 +37,13 @@
         justify-content: center;
         align-items: center;
       }
+      #create-container{
+          width: 100vh;
+          height: 100vw;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+      }
       #screen{
         width: 100vw;
         height: 100vh;
@@ -79,10 +86,10 @@
     <div id='screen'>
     {% if floorplan.id != None %}
 
-            <div id="floorplan">
+        <div id="floorplan">
             <div id="fp-container">
     {% else %}
-        <p>testing3</p>
+        <div id="create-container">
     {% endif %}
 
     {% block content %}
@@ -90,6 +97,8 @@
 
     {% if floorplan.id != None %}
             </div>
+        </div>
+    {% else %}
         </div>
     {% endif %}
 
