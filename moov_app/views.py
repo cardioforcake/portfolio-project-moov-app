@@ -167,7 +167,7 @@ class FloorplanCreate(LoginRequiredMixin,CreateView):
   
 class FloorPlanUpdate(LoginRequiredMixin,UpdateView):
     model = FloorPlan
-    fields = ['length', 'width', 'comment']
+    fields = ['name','length', 'width', 'comment']
 
 
 
