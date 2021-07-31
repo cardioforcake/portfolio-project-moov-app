@@ -97,11 +97,13 @@ def greeting(request):
 
 @login_required
 def home(request):
+    floorplans = FloorPlan.objects.all()
+
     if len(CurrentFloorPlan.objects.filter(user=request.user)) != 0:
       currentFP = CurrentFloorPlan.objects.get(user=request.user).currentfloorplan
     else:
       currentFP = 0
-    return render(request, 'home.html', {'currentFP': currentFP})
+    return render(request, 'home.html', {'currentFP': currentFP, 'floorplans': floorplans})
 
 def floorplan_index(request):
   floorplans = FloorPlan.objects.all()
@@ -120,7 +122,7 @@ def floorplan_details2(request, floorplan_id):
     curr.save()
     currentFP = CurrentFloorPlan.objects.get(user=request.user).currentfloorplan
   furnitures_floorplan_doesnt_have = Furniture.objects.exclude(id__in = floorplan.furnitures.all().values_list('id'))
-  return render(request, 'floorplan/floorplan_details.html', {
+  return render(request, 'floorplan/floorplan_details2.html', {
     'floorplan':floorplan,
     'furnitures': furnitures_floorplan_doesnt_have,
     'currentFP': currentFP,
@@ -134,9 +136,9 @@ def unassoc_furniture(request, floorplan_id, furniture_id):
   FloorPlan.objects.get(id=floorplan_id).furnitures.remove(furniture_id)
   return redirect('floorplan_details', floorplan_id=floorplan_id)
   
-# def remove_furniture(request, floorplan_id, furniture_id):
-#   FloorPlan.objects.get(id=floorplan_id).furnitures.remove(Furniture.objects.get(id=furniture_id))
-#   return redirect('floorplan_details', floorplan_id=floorplan_id)
+def remove_furniture(request, floorplan_id, furniture_id):
+  FloorPlan.objects.get(id=floorplan_id).furnitures.remove(Furniture.objects.get(id=furniture_id))
+  return redirect('floorplan_details', floorplan_id=floorplan_id)
   
 def rotate_furniture(request, floorplan_id, furniture_id):
   linked = LinkedFurniture.objects.filter(floorplan=floorplan_id).get(furniture=furniture_id)

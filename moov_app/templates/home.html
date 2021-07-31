@@ -24,6 +24,9 @@
       </div>
     </div>
 {% else %}
+
+
+
 {% for fp in currentFP.photo_set.all %}
 
 <div class="flex">
@@ -39,6 +42,8 @@
 
 
     {% endfor %}
+
+    
     
     <button type="button" class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block">
       <a href="{% url 'floorplan_index' %}" class="li-modal">Change Floorplans</a>
@@ -60,4 +65,6 @@
 
   </div>
   {% endif %}
+
+
 {% endblock %}

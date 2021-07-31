@@ -179,6 +179,30 @@
       </div>
     </div>
 
+    <div class="modal fade" id="add-photo-modal" tabindex="-1" aria-labelledby="addPhotoLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content" id="add-photo-content">
+          <form class="card-panel" action="{% url 'add_photo' floorplan.id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" name="photo-file">
+            <br>
+            <br>
+          
+            <input type="submit" value="upload floorplan" class="btn">
+          
+          </form>
+          
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
   </div>
   <footer>
     <div class="footer">
@@ -188,6 +212,8 @@
                   <a class="dropdown-item text-white btn btn-primary furniture-modal" href="#">Furniture</a>
                   <a class="dropdown-item text-white btn btn-primary" href="{% url 'home' %}">Home</a>
                   <a class="dropdown-item text-white btn btn-primary help-modal" href="#">Help</a>
+                  <a class="dropdown-item text-white btn btn-primary add-photo-modal" href="{% url 'add_photo' currentFP.id %}">Add Photo</a>
+
           </div>
         </div>
       <!-- </div> -->
