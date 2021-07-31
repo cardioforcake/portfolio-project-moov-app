@@ -160,8 +160,8 @@ class FloorplanCreate(LoginRequiredMixin,CreateView):
       form.instance.user = self.request.user
       return super().form_valid(form)
     
-    def get_success_url(self):
-        return redirect('floorplan_details', kwargs={'floorplan_id': self.object.id})
+    # def get_success_url(self):
+    #     return redirect('floorplan_details', kwargs={'floorplan_id': self.object.id})
 
 
   
