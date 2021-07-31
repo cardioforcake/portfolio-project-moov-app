@@ -114,9 +114,10 @@
     </style>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo</title>
+    <title>Floorplan Details</title>
 </head>
 <body>
+
   <div id='screen'>
       <div id="floorplan">
         <div id="fp-container">
@@ -149,6 +150,11 @@
         </p>
 
       </div>
+      {% for fp in currentFP.photo_set.all %}
+
+        <img class="card-img-top" src="{{ fp.url }}" alt="Card image cap">
+
+      {% endfor %}
     </div>
 
     <div class="modal fade" id="help-modal" tabindex="-1" aria-labelledby="helpLabel" aria-hidden="true">

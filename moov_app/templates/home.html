@@ -8,7 +8,21 @@
     <!-- <p>empty</p> -->
     <a href="{% url 'floorplan_create'  %}" ><button  class="btn btn-lg mb-2 mb-md-0  btn-block "></button> <div class="circle">
     </div></a>
-    <a href="{% url 'floorplan_index' %}" ><button  class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block ">Change Floorplan</button></a>
+    <button type="button" class="btn btn-lg mb-2 mb-md-0 btn-secondary btn-block">
+      <a href="{% url 'floorplan_index' %}" class="li-modal">Change Floorplans</a>
+    </button>
+    <div class="modal fade" id="theModal" tabindex="-1" aria-labelledby="floorPlanLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+          </div>
+          <div class="modal-body">
+          </div>
+          <div class="modal-footer">
+          </div>
+        </div>
+      </div>
+    </div>
 {% else %}
 {% for fp in currentFP.photo_set.all %}
 
