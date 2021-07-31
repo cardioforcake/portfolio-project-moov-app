@@ -111,6 +111,41 @@
       .modal, .modal-content{
         margin: 0 auto;
       }
+      #help-content{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgb(165, 165, 165);
+      }
+      #fp-edit-btn-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .fp-edit-link{
+        margin: 5vh;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+      .fp-edit-link:link{
+        text-decoration: none;
+      }
+      .fp-edit-btn{
+        width: 75%;
+        margin: 0 auto;
+        padding: 3vw;
+        font-weight: bold;
+        font-size: 2.75vh;
+        border-radius: 0.3vw;
+        color: white;
+        background-color: black;
+      }
+      .furn-type{
+        text-transform: capitalize;
+        font-weight: 500;
+      }
     </style>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -164,9 +199,11 @@
         <div class="modal-content" id="furniture-content">
             {% for furn in allFurnitures %}
               <button id="incldf{{furn.id}}" class="furn" style="background-color: {{furn.color}}; border-radius: 0.3vw;">
-                {{furn.type}}
-                {{furn.length}}
-                {{furn.width}}
+                <span class="furn-type">{{furn.type}}</span>
+                <br>
+                Length: {{furn.length}}ft
+                <br>
+                Width: {{furn.width}}ft
               </button>
             {% endfor %}
         </div>
@@ -176,13 +213,14 @@
     <div class="modal fade" id="floorplan-modal" tabindex="-1" aria-labelledby="helpLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content" id="help-content">
-            <a href="{% url 'floorplan_update' floorplan.id %}">
-              <button>Update Floorplan</button>
-            </a>
-            <a href="{% url 'floorplan_delete' floorplan.id %}">
-              <button>Delete Floorplan</button>
-            </a>
-
+            <div id="fp-edit-btn-container">
+              <a href="{% url 'floorplan_update' floorplan.id %}"  class="fp-edit-link">
+                <button class="fp-edit-btn">Update Floorplan</button>
+              </a>
+              <a href="{% url 'floorplan_delete' floorplan.id %}" class="fp-edit-link">
+                <button class="fp-edit-btn">&nbsp;Delete&nbsp; Floorplan</button>
+              </a>
+            </div>
         </div>
       </div>
     </div>
