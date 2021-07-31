@@ -33,7 +33,7 @@ class Furniture(models.Model):
         return self.type
 
     def get_absolute_url(self):
-        return reverse('demo', kwargs={'pk': self.id})
+        return reverse('home')
 
 class FloorPlan(models.Model):
     name = models.CharField(max_length=20)
